@@ -1,5 +1,5 @@
 import Image from "next/image";
-import {heroImage, foodOneImage, foodTwoImage, foodThreeImage, foodTrenImage, newsImage} from "@/assets";
+import {heroHome, foodOneImage, foodTwoImage, foodThreeImage, foodTrenImage, newsImage} from "@/assets";
 
 export default function landingPage() {
   return (
@@ -28,7 +28,7 @@ export default function landingPage() {
           </div>
           <div className="flex justify-center">
             <Image
-              src={heroImage}
+              src={heroHome}
               alt="kuliner hero"
               width={450}
               height={450}

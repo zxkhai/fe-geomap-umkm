@@ -13,7 +13,7 @@ export default function Navbar() {
     { name: "Beranda", href: "/" },
     { name: "MAP", href: "/map" },
     { name: "UMKM", href: "/umkm" },
-    { name: "Tentang", href: "/tentang" },
+    { name: "Tentang", href: "/about" },
   ];
 
   return (
