@@ -14,7 +14,7 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
     <main className={`${raleway.variable}`}>
       <Navbar />
-        <div className="px-12 mx-auto">
+        <div className="bg-white mx-auto text-black">
           <Component {...pageProps} />
         </div>
       <Footer />

@@ -1,39 +1,47 @@
 import Image from "next/image";
 import {heroHome, foodOneImage, foodTwoImage, foodThreeImage, foodTrenImage, newsImage} from "@/assets";
+import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa";
 
 export default function landingPage() {
   return (
     <>
       {/* HERO SECTION */}
-      <section className="bg-gray-50">
-        <div className="max-w-7xl mx-auto px-6 py-16 grid md:grid-cols-2 gap-8 items-center">
-          <div>
-            <h1 className="text-4xl md:text-5xl font-bold leading-tight">
-              Satu Peta, Ribuan Rasa <br />
-              <span className="text-orange-500">
-                Kuliner Pamekasan & Sumenep
-              </span>
-            </h1>
-            <p className="text-gray-600 mt-4">
-              Temukan kuliner lokal terbaik, dari jajanan tradisional hingga makanan kekinian – semua dalam satu peta interaktif.
-            </p>
-            <div className="flex gap-4 mt-6">
-              <button className="bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition">
-                Jelajahi MAP
-              </button>
-              <button className="bg-orange-500 text-white px-5 py-2 rounded-full hover:bg-orange-600 transition">
-                Jelajahi UMKM
-              </button>
-            </div>
-          </div>
-          <div className="flex justify-center">
-            <Image
-              src={heroHome}
-              alt="kuliner hero"
-              width={450}
-              height={450}
-              className="rounded-xl"
-            />
+      <section
+        className="w-full h-[540px] flex items-center px-4"
+        style={{
+          backgroundImage: `url(${typeof heroHome === 'string' ? heroHome : heroHome.src})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center'
+        }}
+      >
+        <div className="max-w-7xl mx-auto px-4 py-10 text-center flex-col items-center justify-center">
+          <p className="font-semibold text-5xl my-2">Satu Peta, Ribuan Rasa</p>
+          <p className="text-[var(--yellow-umkm)] font-semibold text-5xl my-2">Kuliner Pamekasan & Sumenep</p>
+          <p className="max-w-2xl text-xl my-8">Temukan kuliner lokal terbaik, dari jajanan tradisional hingga makanan kekinian – semua dalam satu peta interaktif.</p>
+          <div className="flex items-center justify-center gap-12 mt-4">
+            <Link
+              href="/map"
+              className="group flex items-center gap-3 bg-black text-white px-6 py-3 rounded-full hover:bg-[var(--yellow-umkm)] transition-colors"
+            >
+              <p className="group-hover:text-black font-medium transition-colors">Jelajahi MAP</p>
+              <div className="bg-transparent p-1 rounded-full outline-1 outline-white group-hover:bg-black group-hover:outline-none transition-colors">
+                <div className="bg-white p-1 rounded-full group-hover:bg-black transition-colors">
+                  <FaArrowRight className="w-3 h-auto text-black group-hover:text-[var(--yellow-umkm)] transition-colors" />
+                </div>
+              </div>
+            </Link>
+            <Link
+              href="/umkm"
+              className="group flex items-center gap-3 bg-[var(--yellow-umkm)] text-white px-6 py-3 rounded-full hover:bg-black transition-colors"
+            >
+              <p className="font-medium transition-colors">Jelajahi UMKM</p>
+              <div className="bg-transparent p-1 rounded-full outline-1 outline-white group-hover:bg-white group-hover:outline-none transition-colors">
+                <div className="bg-white p-1 rounded-full transition-colors">
+                  <FaArrowRight className="w-3 h-auto text-[var(--yellow-umkm)] group-hover:text-black transition-colors" />
+                </div>
+              </div>
+            </Link>
           </div>
         </div>
       </section>
