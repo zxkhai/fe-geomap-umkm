@@ -21,7 +21,7 @@ export default function Navbar() {
   ];
 
   return (
-    <nav className="w-full bg-white shadow-sm top-0 z-50">
+    <nav className="w-full bg-white drop-shadow-lg">
       <div className="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between">
         <div className="text-lg text-gray-700 font-bold">
           GEO <span className="text-[var(--yellow-umkm)]">KULINER</span>
