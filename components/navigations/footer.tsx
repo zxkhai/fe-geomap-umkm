@@ -23,7 +23,7 @@ export default function Footer() {
           <p className="mt-3 text-sm">
             Satu peta, ribuan rasa untuk dijelajahi. Dukung UMKM dan banggakan rasa asli.
           </p>
-          <Link href='/admin-login' className="inline-block mt-4 border px-4 py-2 rounded-full hover:bg-[var(--yellow-umkm)] hover:text-black transition-colors">
+          <Link href='/admin/login' className="inline-block mt-4 border px-4 py-2 rounded-full hover:bg-[var(--yellow-umkm)] hover:text-black transition-colors">
             <p className="flex items-center gap-2 text-sm font-medium">
               Login Admin
               <FaRegUserCircle className="h-6 w-auto" />
