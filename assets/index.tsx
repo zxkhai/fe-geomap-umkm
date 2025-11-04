@@ -4,6 +4,7 @@ import foodTrenImage from "@/assets/foodTren.png";
 import newsImage from "@/assets/news.png";
 import heroAbout from "@/assets/heroAbout.png";
 import adminLoginImage from "@/assets/adminLogin.png";
+import passwordImage from "@/assets/forgotPassword.png";
 
 export { 
   heroHome, 
@@ -12,4 +13,5 @@ export {
   adminLoginImage,
   newsImage,
   heroAbout,
+  passwordImage
 };
