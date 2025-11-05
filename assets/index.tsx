@@ -5,6 +5,8 @@ import newsImage from "@/assets/news.png";
 import heroAbout from "@/assets/heroAbout.png";
 import adminLoginImage from "@/assets/adminLogin.png";
 import passwordImage from "@/assets/forgotPassword.png";
+import leftsideAbout from "@/assets/leftsideAbout.png";
+import rightsideAbout from "@/assets/rightsideAbout.png";
 
 export { 
   heroHome, 
@@ -13,5 +15,7 @@ export {
   adminLoginImage,
   newsImage,
   heroAbout,
+  leftsideAbout,
+  rightsideAbout,
   passwordImage
 };

@@ -2,6 +2,7 @@ import Footer from "@/components/navigations/footer";
 import Navbar from "@/components/navigations/navbar";
 import "@/styles/globals.css";
 import type { AppProps } from "next/app";
+import { useRouter } from "next/router";
 import { Raleway } from "next/font/google";
 
 const raleway = Raleway({
@@ -11,6 +12,17 @@ const raleway = Raleway({
 });
 
 export default function App({ Component, pageProps }: AppProps) {
+  const router = useRouter();
+  const isAdminPage = router.pathname.startsWith('/admin');
+
+  if (isAdminPage) {
+    return (
+      <main className={`${raleway.variable}`}>
+        <Component {...pageProps} />
+      </main>
+    );
+  }
+
   return (
     <main className={`${raleway.variable}`}>
       <Navbar />
