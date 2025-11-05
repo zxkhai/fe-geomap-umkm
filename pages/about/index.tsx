@@ -1,7 +1,7 @@
 import { foodOneImage, heroAbout } from "@/assets";
 import Image from "next/image";
 
-export default function aboutPage() {
+export default function AboutPage() {
   return (
     <>  
       {/* HERO SECTION */}

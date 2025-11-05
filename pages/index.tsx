@@ -4,7 +4,7 @@ import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa";
 import FoodCardUMKM from "@/components/cards/CardUMKM";
 
-export default function landingPage() {
+export default function LandingPage() {
   
   const food = [
     { image: foodOneImage, name: "Nasi Goreng Enak banget oyyyy", slug: "warung-soto-rujak-cak-man" },

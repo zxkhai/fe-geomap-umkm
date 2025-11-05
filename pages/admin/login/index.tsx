@@ -5,8 +5,8 @@ import { adminLoginImage } from "@/assets";
 import { LuEye, LuEyeClosed } from "react-icons/lu";
 
 export default function LoginPage() {
+  
   const [showPassword, setShowPassword] = useState(false);
-
 
   return (
   <>

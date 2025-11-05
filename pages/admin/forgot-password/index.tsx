@@ -11,31 +11,28 @@ export default function ForgotPasswordPage() {
         backgroundPosition: 'center'
       }}
     >
-  <div className="bg-white rounded-3xl shadow-lg p-8 w-full max-w-md text-center">
-        <h1 className="text-2xl font-bold mb-2">
+      <div className="bg-white rounded-3xl shadow-lg p-10 w-full max-w-lg text-center">
+        <h1 className="text-2xl font-bold mb-5">
           Lupa <span className="text-[var(--yellow-umkm)]">Password?</span>
         </h1>
 
-        {/* Subtitle */}
         <p className="text-black mb-6 text-sm">
           Masukkan email admin untuk mengirim kode reset
         </p>
 
-        {/* Input Field */}
         <div className="mb-5">
           <input
             type="email"
-            placeholder="Masukkan email"
-            className="w-full border border-gray-500 rounded-full px-8 py-3 text-sm outline-none"
+            name="email"
+            placeholder="Masukkan Email"
+            className="w-full border border-gray-500 rounded-full px-8 py-4 text-sm outline-none"
           />
         </div>
 
-        {/* Submit Button */}
         <button className="w-full bg-black text-white font-medium py-3 rounded-full hover:bg-[var(--yellow-umkm)] hover:text-black transition-colors hover:cursor-pointer">
           Kirim Kode
         </button>
 
-        {/* Footer */}
         <p className="mt-5 text-sm text-gray-600">
           Ingat password?{" "}
           <Link href="/admin/login" className="text-black font-bold">
