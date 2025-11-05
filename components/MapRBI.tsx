@@ -1,7 +1,8 @@
 'use client';
 
-import { MapContainer, TileLayer, GeoJSON } from 'react-leaflet';
+import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet';
 import { useEffect, useState } from 'react';
+import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 interface GeoLayer {
@@ -10,11 +11,83 @@ interface GeoLayer {
   style: any;
 }
 
+interface UMKM {
+  id: number;
+  name: string;
+  description: string;
+  lat: number;
+  lng: number;
+  photo: string;
+  location?: string;
+}
+
+const umkmData: UMKM[] = [
+  {
+    id: 1,
+    name: 'Tajin Sobih Bu Aminah',
+    description: 'Legenda',
+    lat: -7.071,
+    lng: 113.49,
+    photo: '/umkm/tajin-sobih.jpg',
+    location: 'Pamekasan',
+  },
+  {
+    id: 2,
+    name: 'Sate Lalat Pak Memet',
+    description: 'Khas Pamekasan',
+    lat: -7.15,
+    lng: 113.47,
+    photo: '/umkm/sate-lalat.jpg',
+    location: 'Pamekasan',
+  },
+  {
+    id: 3,
+    name: 'Kaldu Kokot Sumenep',
+    description: 'Kuliner ikonik',
+    lat: -7.01,
+    lng: 113.87,
+    photo: '/umkm/kaldu-kokot.jpg',
+    location: 'Sumenep',
+  },
+];
+
+const createIcon = (photo: string) =>
+  L.divIcon({
+    html: `
+      <div style="
+        position: relative;
+        width: 42px;
+        height: 42px;
+        background-color: white;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid orange;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      ">
+        <img src="${photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" />
+        <div style="
+          position:absolute;
+          bottom:-8px;
+          left:50%;
+          transform:translateX(-50%);
+          width:0;
+          height:0;
+          border-left:8px solid transparent;
+          border-right:8px solid transparent;
+          border-top:12px solid orange;
+        "></div>
+      </div>
+    `,
+    className: '',
+    iconSize: [42, 42],
+    iconAnchor: [21, 42],
+    popupAnchor: [0, -40],
+  });
+
 export default function RBImap({ filter = 'Semua' }: { filter?: string }) {
   const [pamekasanLayers, setPamekasanLayers] = useState<GeoLayer[]>([]);
   const [sumenepLayers, setSumenepLayers] = useState<GeoLayer[]>([]);
 
-  // Fungsi ambil data
   const loadKabupatenData = async (
     kabupaten: string,
     color: string,
@@ -49,7 +122,7 @@ export default function RBImap({ filter = 'Semua' }: { filter?: string }) {
 
   return (
     <MapContainer
-      center={[-7.11667000, 114.33333000]}
+      center={[-7.11667, 113.33333]}
       zoom={9}
       style={{ height: '90vh', width: '100%' }}
     >
@@ -58,7 +131,6 @@ export default function RBImap({ filter = 'Semua' }: { filter?: string }) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {/* Layers are controlled by parent via `filter` prop. */}
       {(filter === 'Semua' || filter === 'Pamekasan') &&
         pamekasanLayers.map((layer, i) => (
           <GeoJSON key={`pamekasan-${i}`} data={layer.data} style={layer.style} />
@@ -67,6 +139,20 @@ export default function RBImap({ filter = 'Semua' }: { filter?: string }) {
       {(filter === 'Semua' || filter === 'Sumenep') &&
         sumenepLayers.map((layer, i) => (
           <GeoJSON key={`sumenep-${i}`} data={layer.data} style={layer.style} />
+        ))}
+
+      {umkmData
+        .filter((u) => filter === 'Semua' || u.location === filter)
+        .map((u) => (
+          <Marker key={u.id} position={[u.lat, u.lng]} icon={createIcon(u.photo)}>
+            <Popup>
+              <div style={{ maxWidth: 220 }}>
+                <strong>{u.name}</strong>
+                <p style={{ margin: '6px 0' }}>{u.description}</p>
+                <img src={u.photo} alt={u.name} style={{ width: '100%', borderRadius: 8 }} />
+              </div>
+            </Popup>
+          </Marker>
         ))}
     </MapContainer>
   );
