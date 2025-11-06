@@ -67,7 +67,7 @@ export default function DataUmkmPage() {
                 <td className="px-5 py-4 text-center">
                   <div className="inline-flex items-center gap-2 justify-center">
                     <Link
-                      href={`/admin/umkm/edit${umkm.id}`}
+                      href={`/admin/umkm/${umkm.id}`}
                       className="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded"
                       aria-label={`Edit ${umkm.name}`}
                     >
@@ -77,7 +77,7 @@ export default function DataUmkmPage() {
                     <button
                       onClick={() => handleDelete(umkm.id)}
                       className="text-white bg-red-500 hover:bg-red-600 hover:cursor-pointer px-3 py-1 rounded"
-                      aria-label={`Hapus ${umkm.name}`}
+                      aria-label={`Hapus ${umkm.id}`}
                     >
                       <MdDeleteOutline />
                     </button>
