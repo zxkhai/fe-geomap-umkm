@@ -4,6 +4,8 @@ import "@/styles/globals.css";
 import type { AppProps } from "next/app";
 import { useRouter } from "next/router";
 import { Raleway } from "next/font/google";
+import Sidebar from '@/components/admins/sidebar';
+import Topbar from '@/components/admins/topbar';
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -13,12 +15,29 @@ const raleway = Raleway({
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const isAdminPage = router.pathname.startsWith('/admin');
+  
+  const adminAuthPathsShowMainLayout = [
+    '/admin/login',
+    '/admin/forgot-password',
+    '/admin/reset-password', 
+  ];
+
+  const isAdminPage =
+    router.pathname.startsWith('/admin') &&
+    !adminAuthPathsShowMainLayout.some((p) => router.pathname.startsWith(p));
 
   if (isAdminPage) {
     return (
       <main className={`${raleway.variable}`}>
-        <Component {...pageProps} />
+        <div className="flex h-screen bg-gray-100">
+          <Sidebar />
+          <div className="flex-1 flex flex-col">
+            <Topbar />
+            <main className="flex-1 overflow-y-auto p-6">
+              <Component {...pageProps} />
+            </main>
+          </div>
+        </div>
       </main>
     );
   }

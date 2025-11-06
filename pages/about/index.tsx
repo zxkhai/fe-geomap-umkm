@@ -164,7 +164,7 @@ export default function AboutPage() {
         <h2 className="text-[32px] md:text-[40px] font-bold mb-3">
           Bersama Membangun <span className="text-[var(--yellow-umkm)]">UMKM Lokal</span>
         </h2>
-        <p className="text-gray-600 max-w-none mx-auto mb-8 text-[54px] leading-relaxed">
+        <p className="text-gray-600 max-w-none mx-auto mb-8 text-4xl leading-relaxed">
           “Mari dukung produk UMKM Pamekasan &amp; Sampang dengan bangga
           menggunakan produk lokal.”
         </p>
