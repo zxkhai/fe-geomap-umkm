@@ -71,33 +71,30 @@ export default function AboutPage() {
       </section>
 
       {/* MENGAPA GEOMAPS HADIR */}
-      <section className="relative max-w-7xl mx-auto px-6 py-20">
+      {/* Belum selesai */}
+      <section className="relative max-w-7xl mx-auto px-6 py-20 flex justify-between items-center">
           <Image
             src={leftsideAbout}
             alt="Left Side About"
-            width={275}
-            className="hidden md:block absolute left-0 bottom-0 -translate-x-1/2 pointer-events-none select-none"
+            width={375}
+            className="hidden md:block absolute left-0 bottom-0 -ml-32 z-0 pointer-events-none select-none"
           />
           <Image
             src={rightsideAbout}
             alt="Right Side About"
             width={240}
-            className="hidden md:block absolute right-0 top-0 translate-x-1/2 pointer-events-none select-none"
+            className="hidden md:block absolute right-0 bottom-45 -mr-32 z-0 pointer-events-none select-none"
           />
-        <h2 className="text-center text-4xl md:hidden font-bold mb-14 leading-tight">
-          <span className="block">Mengapa</span>
-          <span className="block text-[var(--yellow-umkm)]">Geomaps UMKM</span>
-          <span className="block">Hadir ?</span>
-        </h2>
-    <div className="relative grid md:grid-cols-3 grid-cols-1 items-center gap-10">
+
+    <div className="relative grid md:grid-cols-3 grid-cols-1 items-start gap-10">
           {/* Left Side */}
-          <div className="md:col-span space-y-25">
+          <div className="md:col-span-1 space-y-45">
             <div className="md:pl-12">
-              <div className="relative">
-                <div className="absolute -left-10 top-0 bg-black text-white rounded-full w-16 h-16 flex items-center justify-center font-extrabold text-3xl">
+              <div className="relative md:ml-10">
+                <div className="absolute -left-8 bg-black text-white rounded-full w-15 h-15 flex items-center justify-center font-extrabold text-4xl">
                   1
                 </div>
-                <div className="bg-white rounded-2xl p-6 pt-8 text-2xl text-center leading-relaxed w-full md:w-[375px] shadow-xl shadow-black/10">
+                <div className="bg-white rounded-2xl p-4 pt-6 text-2xl text-center leading-relaxed w-full md:w-[375px] shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
                   <p>Memperkenalkan</p>
                   <p>produk UMKM</p>
                   <p>unggulan daerah.</p>
@@ -105,52 +102,51 @@ export default function AboutPage() {
               </div>
             </div>
 
-            <div className="md:pl-16">
-              <div className="relative">
-                <div className="absolute -left-10 top-0 bg-black text-white rounded-full w-16 h-16 flex items-center justify-center font-extrabold text-3xl">
-                  2
+            <div className="md:pl-24">
+              <div className="md:flex md:items-start md:gap-8">
+                <div className="relative md:ml-26 md:flex-1">
+                  <div className="absolute -left-8 bg-black text-white rounded-full w-15 h-15 flex items-center justify-center font-extrabold text-4xl">
+                    2
+                  </div>
+                    <div className="bg-white rounded-2xl p-4 pt-6 text-2xl text-center leading-relaxed w-full md:w-[375px] shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
+                    <p>Membuka akses pasar</p>
+                    <p> lebih luas bagi UMKM.</p>
+                  </div>
                 </div>
-                <div className="bg-white rounded-2xl p-6 pt-8 text-2xl text-center leading-relaxed w-full md:w-[375px] shadow-xl shadow-black/10">
-                  <p>Membuka akses pasar</p>
-                  <p> lebih luas bagi UMKM.</p>
+
+                <div className="relative md:ml-24 md:mr-24 md:flex-1">
+                  <div className="absolute -left-8 bg-black text-white rounded-full w-15 h-15 flex items-center justify-center font-extrabold text-4xl">
+                    3
+                  </div>
+                    <div className="bg-white rounded-2xl p-4 pt-6 text-2xl text-center leading-relaxed w-full md:w-[375px] shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
+                    <p>Mendukung</p>
+                    <p>pertumbuhan ekonomi</p>
+                    <p>lokal.</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="hidden md:flex items-center justify-center md:col-span-1">
-            <h2 className="text-center text-2xl md:text-3xl font-bold leading-tight">
+          <div className="hidden md:flex items-center justify-center md:col-span-1 self-center">
+            <h2 className="text-center text-5xl font-bold leading-tight">
               <span className="block">"Mengapa</span>
               <span className="block text-[var(--yellow-umkm)]">Geomaps UMKM</span>
               <span className="block">Hadir ?"</span>
             </h2>
+            
           </div>
-
           {/* Right Side */}
-          <div className="md:col-span-1 space-y-25">
-            <div className="md:pr-12">
-              <div className="relative">
-                <div className="absolute -left-10 top-0 bg-black text-white rounded-full w-16 h-16 flex items-center justify-center font-extrabold text-3xl">
+          <div className="md:col-span-1">
+            <div className="md:pr-0">
+              <div className="relative md:mr-0 md:-ml-16">
+                <div className="absolute -left-8 bg-black text-white rounded-full w-15 h-15 flex items-center justify-center font-extrabold text-4xl">
                   4
                 </div>
-                <div className="bg-white rounded-2xl p-6 pt-8 text-2xl text-center leading-relaxed w-full md:w-[375px] shadow-xl shadow-black/10">
+                <div className="bg-white rounded-2xl p-4 pt-6 text-2xl text-center leading-relaxed w-full md:w-[375px] shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
                   <p>Menjadikan UMKM</p>
                   <p>sebagai ikon wisata</p>
                   <p>dan budaya daerah.</p>
-                </div>
-              </div>
-            </div>
-            
-            
-            <div className="md:pr-16">
-              <div className="relative">
-                <div className="absolute -left-10 top-0 bg-black text-white rounded-full w-16 h-16 flex items-center justify-center font-extrabold text-3xl">
-                  3
-                </div>
-                <div className="bg-white rounded-2xl p-6 pt-8 text-2xl text-center leading-relaxed w-full md:w-[375px] shadow-xl shadow-black/10">
-                  <p>Mendukung</p>
-                  <p>pertumbuhan ekonomi</p>
-                  <p>lokal.</p>
                 </div>
               </div>
             </div>
