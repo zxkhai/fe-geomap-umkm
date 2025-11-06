@@ -23,8 +23,8 @@ export default function Sidebar() {
     <aside className="hidden md:block w-52 bg-gray-100 sticky top-20 h-[calc(100vh-5rem)] overflow-auto">
       <nav className="px-3 space-y-2 mt-4">
         <NavItem href="/admin/dashboard" label="Dashboard" />
-        <NavItem href="/admin/data-umkm" label="Data UMKM" />
-        <NavItem href="/admin/profil" label="Profil" />
+        <NavItem href="/admin/umkm" label="Data UMKM" />
+        <NavItem href="/admin/profile" label="Profile" />
       </nav>
 
       <div className="absolute left-0 bottom-0 w-full p-4">
