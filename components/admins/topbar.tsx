@@ -1,14 +1,24 @@
+import { IoMdNotificationsOutline } from "react-icons/io";
+
 export default function Topbar() {
   return (
-    <div className="bg-white border-b">
-  <div className="h-16 flex items-center justify-end px-6 md:px-10">
-        {/* Left notif*/}
+    <div className="bg-gray-100 sticky top-0 z-20">
+      <div className="h-20 flex items-center justify-between px-6 md:px-10">
+        <div>
+          <p className="font-bold tracking-wide text-black">
+            GEO <span className="text-[var(--yellow-umkm)]">KULINER</span>
+          </p>
+        </div>
+
         <div className="flex items-center gap-4">
-          <button className="relative">
-            <span className="inline-block w-5 h-5 rounded-full border border-gray-400" />
+          <button
+            aria-label="Notifications"
+            className="relative p-2 rounded-full hover:cursor-pointer"
+          >
+            <IoMdNotificationsOutline size={20} className="text-gray-600" />
+            {/* badge */}
             <span className="absolute -top-1 -right-1 w-4 h-4 text-[10px] rounded-full bg-[var(--yellow-umkm)] text-white grid place-items-center">5</span>
           </button>
-          {/* Static dd/mm/yy */}
           <div className="rounded-full border px-4 py-2 text-sm text-gray-700">
             23 September 2025
           </div>

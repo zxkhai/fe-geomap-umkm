@@ -1,11 +1,11 @@
+import "@/styles/globals.css";
+import { useRouter } from "next/router";
+import type { AppProps } from "next/app";
+import { Raleway } from "next/font/google";
+import Topbar from '@/components/admins/topbar';
+import Sidebar from '@/components/admins/sidebar';
 import Footer from "@/components/navigations/footer";
 import Navbar from "@/components/navigations/navbar";
-import "@/styles/globals.css";
-import type { AppProps } from "next/app";
-import { useRouter } from "next/router";
-import { Raleway } from "next/font/google";
-import Sidebar from '@/components/admins/sidebar';
-import Topbar from '@/components/admins/topbar';
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -29,13 +29,14 @@ export default function App({ Component, pageProps }: AppProps) {
   if (isAdminPage) {
     return (
       <main className={`${raleway.variable}`}>
-        <div className="flex h-screen bg-gray-100">
-          <Sidebar />
-          <div className="flex-1 flex flex-col">
-            <Topbar />
-            <main className="flex-1 overflow-y-auto p-6">
+        <div className="flex flex-col h-screen">
+          <Topbar />
+          <div className="flex flex-1 bg-white">
+            <Sidebar />
+
+            <div className="flex-1 overflow-y-auto p-6">
               <Component {...pageProps} />
-            </main>
+            </div>
           </div>
         </div>
       </main>

@@ -14,7 +14,7 @@ const mock: umkmDataType[] = Array.from({ length: 8 }).map((_, i) => ({
 
 export default function DataUmkmPage() {
   return (
-    <div className="max-w-[1100px] mx-auto">
+    <div className="max-w-full mx-auto">
       <PageHeader title="Data UMKM" />
       <DataTable rows={mock} />
     </div>
