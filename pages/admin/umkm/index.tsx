@@ -40,7 +40,7 @@ export default function DataUmkmPage() {
     <div className="max-w-full mx-auto">
       <div className="flex justify-between items-center mb-5">
         <h1 className="text-xl font-semibold mb-4 text-black">Data UMKM</h1>
-        <Link href="/admin/add-umkm" className="flex items-center gap-3 bg-black text-white px-10 py-1 rounded-lg">
+        <Link href="/admin/umkm/add" className="flex items-center gap-3 bg-black text-white px-10 py-1 rounded-lg">
           Tambah
           <FaPlus />
         </Link>
@@ -67,7 +67,7 @@ export default function DataUmkmPage() {
                 <td className="px-5 py-4 text-center">
                   <div className="inline-flex items-center gap-2 justify-center">
                     <Link
-                      href={`/admin/edit-umkm/${umkm.id}`}
+                      href={`/admin/umkm/edit${umkm.id}`}
                       className="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded"
                       aria-label={`Edit ${umkm.name}`}
                     >
