@@ -19,7 +19,8 @@ export default function App({ Component, pageProps }: AppProps) {
   const adminAuthPathsShowMainLayout = [
     '/admin/login',
     '/admin/forgot-password',
-    '/admin/reset-password', 
+    '/admin/reset-password',
+    '/admin/status-password',
   ];
 
   const isAdminPage =
