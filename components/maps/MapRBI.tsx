@@ -11,7 +11,7 @@ interface GeoLayer {
   style: any;
 }
 
-interface UMKM {
+export interface UMKM {
   id: number;
   name: string;
   description: string;
@@ -19,9 +19,12 @@ interface UMKM {
   lng: number;
   photo: string;
   location?: string;
+  address?: string;
+  phone?: string;
+  history?: string;
 }
 
-const umkmData: UMKM[] = [
+export const umkmData: UMKM[] = [
   {
     id: 1,
     name: 'Tajin Sobih Bu Aminah',
@@ -30,6 +33,9 @@ const umkmData: UMKM[] = [
     lng: 113.49,
     photo: '/umkm/tajin-sobih.jpg',
     location: 'Pamekasan',
+    address: 'Jl. Pintu Gerbang No.126, Pertanian, Bugih, Kec. Pamekasan, Kabupaten Pamekasan, Jawa Timur 69317',
+    phone: '+62 813 4455 9988',
+    history: 'Nasi Rames atau yang di Pamekasan lebih dikenal dengan sebutan "Nasi Ramoy" (dalam logat Madura, "ramey" sering "ramoy") adalah sajian nasi campur yang mencerminkan kekayaan kuliner budaya di Madura. Kuliner ini berkembang seiring...',
   },
   {
     id: 2,
@@ -39,6 +45,9 @@ const umkmData: UMKM[] = [
     lng: 113.47,
     photo: '/umkm/sate-lalat.jpg',
     location: 'Pamekasan',
+    address: 'Jl. Raya Pamekasan No. 45, Kecamatan Pamekasan, Jawa Timur',
+    phone: '+62 812 3456 7890',
+    history: 'Sate Lalat adalah kuliner khas Pamekasan yang terkenal dengan ukuran sate yang kecil-kecil seperti lalat. Dibuat dari daging sapi pilihan dengan bumbu rempah khas Madura.',
   },
   {
     id: 3,
@@ -48,6 +57,9 @@ const umkmData: UMKM[] = [
     lng: 113.87,
     photo: '/umkm/kaldu-kokot.jpg',
     location: 'Sumenep',
+    address: 'Jl. Trunojoyo No. 78, Kecamatan Sumenep, Jawa Timur',
+    phone: '+62 811 2233 4455',
+    history: 'Kaldu Kokot adalah makanan tradisional khas Sumenep yang terbuat dari daging sapi dengan kuah kaldu yang kaya rempah. Sudah menjadi ikon kuliner Sumenep sejak puluhan tahun.',
   },
 ];
 
@@ -84,7 +96,13 @@ const createIcon = (photo: string) =>
     popupAnchor: [0, -40],
   });
 
-export default function RBImap({ filter = 'Semua' }: { filter?: string }) {
+export default function RBImap({ 
+  filter = 'Semua',
+  onMarkerClick 
+}: { 
+  filter?: string;
+  onMarkerClick?: (umkm: UMKM) => void;
+}) {
   const [pamekasanLayers, setPamekasanLayers] = useState<GeoLayer[]>([]);
   const [sumenepLayers, setSumenepLayers] = useState<GeoLayer[]>([]);
 
@@ -144,14 +162,18 @@ export default function RBImap({ filter = 'Semua' }: { filter?: string }) {
       {umkmData
         .filter((u) => filter === 'Semua' || u.location === filter)
         .map((u) => (
-          <Marker key={u.id} position={[u.lat, u.lng]} icon={createIcon(u.photo)}>
-            <Popup>
-              <div style={{ maxWidth: 220 }}>
-                <strong>{u.name}</strong>
-                <p style={{ margin: '6px 0' }}>{u.description}</p>
-                <img src={u.photo} alt={u.name} style={{ width: '100%', borderRadius: 8 }} />
-              </div>
-            </Popup>
+          <Marker 
+            key={u.id} 
+            position={[u.lat, u.lng]} 
+            icon={createIcon(u.photo)}
+            eventHandlers={{
+              click: () => {
+                if (onMarkerClick) {
+                  onMarkerClick(u);
+                }
+              },
+            }}
+          >
           </Marker>
         ))}
     </MapContainer>

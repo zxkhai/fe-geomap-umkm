@@ -1,11 +1,37 @@
 import { useState } from "react";
 import { CiSearch } from "react-icons/ci";
 import dynamic from "next/dynamic";
+import PopSlideDetail from "@/components/maps/PopSlideDetail";
 
-const MapRBI = dynamic(() => import('@/components/MapRBI'), { ssr: false });
+const MapRBI = dynamic(() => import('@/components/maps/MapRBI'), { ssr: false });
+
+interface UMKM {
+  id: number;
+  name: string;
+  description: string;
+  lat: number;
+  lng: number;
+  photo: string;
+  location?: string;
+  address?: string;
+  phone?: string;
+  history?: string;
+}
 
 export default function MapPage() {
   const [activeFilter, setActiveFilter] = useState<string>("Semua");
+  const [selectedUMKM, setSelectedUMKM] = useState<UMKM | null>(null);
+  const [isDetailOpen, setIsDetailOpen] = useState(false);
+
+  const handleMarkerClick = (umkm: UMKM) => {
+    setSelectedUMKM(umkm);
+    setIsDetailOpen(true);
+  };
+
+  const handleCloseDetail = () => {
+    setIsDetailOpen(false);
+    setSelectedUMKM(null);
+  };
 
   const filterButtons = [
     { name: "Semua", value: "Semua" },
@@ -52,7 +78,25 @@ export default function MapPage() {
       </div>
 
       {/* Map Placeholder */}
-      <MapRBI filter={activeFilter} />
+      <MapRBI filter={activeFilter} onMarkerClick={handleMarkerClick} />
+
+      {/* Pop Slide Detail */}
+      <PopSlideDetail
+        isOpen={isDetailOpen}
+        onClose={handleCloseDetail}
+        umkm={
+          selectedUMKM
+            ? {
+                name: selectedUMKM.name,
+                location: selectedUMKM.location || '',
+                history: selectedUMKM.history || selectedUMKM.description,
+                address: selectedUMKM.address || '',
+                phone: selectedUMKM.phone || '',
+                image: selectedUMKM.photo,
+              }
+            : null
+        }
+      />
     </div>
   );
 }
