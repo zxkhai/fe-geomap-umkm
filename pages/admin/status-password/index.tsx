@@ -1,8 +1,10 @@
 import { passwordImage } from "@/assets";
 import Link from "next/link";
+import NonProtected from "@/components/auth/NonProtected";
 
 export default function StatusPasswordPage() {
   return (
+    <NonProtected>
     <div
       className="w-full h-[600px] flex items-center justify-center px-4"
       style={{
@@ -25,5 +27,6 @@ export default function StatusPasswordPage() {
         </Link>
       </div>
     </div>
+    </NonProtected>
   );
 }

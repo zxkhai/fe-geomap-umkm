@@ -3,6 +3,7 @@ import { useState } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { MdDeleteOutline } from "react-icons/md";
+import Protected from "@/components/auth/Protected";
 
 const initialUmkmDatas = [
   {
@@ -51,6 +52,7 @@ export default function DataUmkmPage() {
   };
 
   return (
+    <Protected>
     <div className="max-w-full mx-auto">
       <div className="flex justify-between items-center mb-5">
         <h1 className="text-xl font-semibold mb-4 text-black">Data UMKM</h1>
@@ -135,5 +137,6 @@ export default function DataUmkmPage() {
         </>
       )}
     </div>
+    </Protected>
   );
 }

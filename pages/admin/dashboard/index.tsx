@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import type { ApexOptions } from 'apexcharts';
 import dashboardMap from "@/assets/dashboardMap.png";
 import { HiArrowCircleUp } from 'react-icons/hi';
+import Protected from '@/components/auth/Protected';
 
 const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -75,6 +76,7 @@ const chartData: { series: ApexAxisChartSeries; options: ApexOptions } = {
 
 const DashboardPage = () => {
   return (
+    <Protected>
     <div className="max-w-full mx-auto text-black">
       {/* Header */}
       <header className="mb-5">
@@ -172,6 +174,7 @@ const DashboardPage = () => {
         </div>
       </div>
     </div>
+    </Protected>
   );
 };
 

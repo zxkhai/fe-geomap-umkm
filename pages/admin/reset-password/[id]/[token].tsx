@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import { useState } from "react";
+import NonProtected from "@/components/auth/NonProtected";
 
 export default function ResetPasswordPage() {
   const router = useRouter();
@@ -37,6 +38,7 @@ export default function ResetPasswordPage() {
   };
 
   return (
+    <NonProtected>
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <div className="bg-white rounded-2xl p-8 shadow-md max-w-md w-full text-center">
         <h1 className="text-2xl font-bold mb-2">
@@ -81,5 +83,6 @@ export default function ResetPasswordPage() {
         </p>
       </div>
     </div>
+    </NonProtected>
   );
 }

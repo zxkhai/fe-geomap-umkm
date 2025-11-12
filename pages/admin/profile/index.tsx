@@ -1,4 +1,5 @@
 import React from "react";
+import Protected from "@/components/auth/Protected";
 
 interface ProfileField {
   label: string;
@@ -15,6 +16,7 @@ const ProfilePage: React.FC = () => {
   ];
 
   return (
+    <Protected>
     <div className="px-6 md:px-10 py-8 max-w-4xl">
       <h1 className="text-2xl font-semibold mb-12 text-black">Profil</h1>
 
@@ -35,6 +37,7 @@ const ProfilePage: React.FC = () => {
         Ubah Password
       </button>
     </div>
+    </Protected>
   );
 };
 
