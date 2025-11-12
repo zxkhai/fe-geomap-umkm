@@ -1,15 +1,31 @@
-import { useState } from 'react';
-import dashboardMap from "@/assets/dashboardMap.png";
 import Image from 'next/image';
-import type { ApexOptions } from 'apexcharts';
 import dynamic from 'next/dynamic';
-import { FaRegArrowAltCircleUp } from "react-icons/fa";
+import type { ApexOptions } from 'apexcharts';
+import dashboardMap from "@/assets/dashboardMap.png";
+import { HiArrowCircleUp } from 'react-icons/hi';
 
-// Menghindari SSR untuk import e
-const ReactApexChart = dynamic(() => import('react-apexcharts'), {
-  ssr: false,
-});
-// Dummy data chart
+const ReactApexChart = dynamic(() => import('react-apexcharts'), { ssr: false });
+
+const UMKM_STATS = {
+  total: 280,
+  monthly_increase: 5,
+  sumenep: 230,
+  pamekasan: 50,
+};
+
+const KECAMATAN_DATA = [
+  { name: 'Galis', count: 5 },
+  { name: 'Kadur', count: 10 },
+  { name: 'Larangan', count: 50 },
+  { name: 'Pademawu', count: 50 },
+  { name: 'Pakong', count: 50 },
+  { name: 'Sampang', count: 10 },
+  { name: 'Pamekasan', count: 20 },
+  { name: 'Ambunten', count: 15 },
+  { name: 'Bluto', count: 25 },
+  { name: 'Batang-Batang', count: 30 },
+];
+
 const chartData: { series: ApexAxisChartSeries; options: ApexOptions } = {
   series: [
     {
@@ -59,151 +75,102 @@ const chartData: { series: ApexAxisChartSeries; options: ApexOptions } = {
 
 const DashboardPage = () => {
   return (
-    <div className="px-6 py-8 mx-auto text-black max-w-7xl">
-      {/* Upper Text */}
-      <h1 className="mb-4 text-2xl font-extra bold ">Dashboard</h1>
-      <p className='text-gray-500 mb-15 text-m'> Selamat datang kembali! Berikut perkeembangan geomap hari ini.</p>
-      {/* Data UMKM */}
-      <div className="grid grid-flow-col grid-rows-3 gap-4">
-      {/* Penambahan UMKM Baru */}
-      <div className="bg-[var(--yellow-umkm)] text-white rounded-xl p-6 mb-8 col-span-2">
-        <h3 className="text-xl font-semibold">Penambahan UMKM baru kota Sumenep</h3>
-        <p className="self-end mt-2 text-sm">5 Menit yang lalu</p>
-      </div>
-        {/* UMKM Terdaftar */}
-        <div className="grid col-span-2 row-span-2 gap-6 sm:grid-cols-2">
-        <div className="p-6 bg-white shadow-md rounded-xl">
-          <h4 className="text-xl font-semibold">UMKM Terdaftar</h4>
-          <p className="mt-2 text-4xl font-bold">280</p>
-          <div className="flex items-center gap-3 md:mt-40">
-            <FaRegArrowAltCircleUp className="text-[var(--yellow-umkm)]" />
-            <p className="text-sm text-gray-500">+5 bulan ini</p>
+    <div className="max-w-full mx-auto text-black">
+      {/* Header */}
+      <header className="mb-5">
+        <h1 className="text-xl font-semibold mb-2">Dashboard</h1>
+        <p className="text-gray-500">
+          Selamat datang kembali! Berikut perkembangan geomap hari ini.
+        </p>
+      </header>
+
+      {/* Main Content - Using Flexbox */}
+      <div className="flex gap-4 mb-8">
+        {/* Left Column */}
+        <div className="flex flex-col gap-4 flex-1">
+          {/* Alert Card */}
+          <div className="bg-[var(--yellow-umkm)] text-white rounded-xl p-6">
+            <h3 className="text-xl font-semibold">Penambahan UMKM baru kota Sumenep</h3>
+            <p className="mt-2 text-sm">5 Menit yang lalu</p>
           </div>
-        </div>
 
-        {/* UMKM Per Kabupaten */}
-        <div className="p-6 bg-white shadow-md rounded-xl">
-          <h4 className="text-xl font-semibold">UMKM Per Kabupaten</h4>
-          <ul className="mt-4 space-y-4">
-            <li className="flex justify-between text-lg font-medium">
-              <span>Sumenep</span>
-              <span className="text-3xl font-bold">230</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>Pamekasan</span>
-              <span className="text-3xl font-bold">50</span>
-            </li>
-          </ul>
-          <div className="flex items-center gap-3 md:mt-25">
-            <FaRegArrowAltCircleUp className="text-[var(--yellow-umkm)]" />
-            <p className="text-sm text-gray-500">+5 bulan ini</p>
-          </div>
-        </div>
-        </div>
-
-        {/* UMKM Per Kecamatan */}
-        <div className="bg-white rounded-xl p-6 shadow-md h-[465px] overflow-y-auto border-b border-gray-300 row-span-3 col-span-2">
-          <h4 className="text-xl font-semibold">UMKM Per Kecamatan</h4>
-          <ul className="mt-4 space-y-4">
-            <li className="flex justify-between text-lg font-medium">
-              <span>Galis</span>
-              <span>5</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>Kadur</span>
-              <span>10</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>Larangan</span>
-              <span>50</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>Pademawu</span>
-              <span>50</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>Pakong</span>
-              <span>50</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>Sampang</span>
-              <span>10</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>Pamekasan</span>
-              <span>20</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>Ambunten</span>
-              <span>15</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>Bluto</span>
-              <span>25</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>Batang-Batang</span>
-              <span>30</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>XXXXX</span>
-              <span>30</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>XXXXX</span>
-              <span>20</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>XXXXX</span>
-              <span>20</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>XXXXX</span>
-              <span>20</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>XXXXX</span>
-              <span>20</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>XXXXX</span>
-              <span>20</span>
-            </li>
-            <li className="flex justify-between text-lg font-medium">
-              <span>XXXXX</span>
-              <span>20</span>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-        <div className="px-6 py-8 mx-auto text-black max-w-7xl">
-            <div className="grid grid-cols-1 gap-4 mb-8 md:grid-cols-2">
-                {/* Map */}
-                <div className="p-6 mb-8 bg-white shadow-md rounded-xl">
-                <h4 className="mb-4 text-xl font-semibold">Peta UMKM</h4>
-                <div className="mt-4 relative w-full h-[300px]">
-                    <Image
-                    src={dashboardMap}
-                    alt="Map"
-                    layout="fill"
-                    objectFit="cover"
-                    />
-                </div>
-                </div>
-
-                {/* Chart */}
-                <div className="p-6 mb-8 bg-white shadow-md rounded-xl">
-                <h4 className="mb-4 text-xl font-semibold">Pertumbuhan UMKM</h4>
-                <ReactApexChart
-                    options={chartData.options}
-                    series={chartData.series}
-                    type="line"
-                    height={350}
-                />
-                </div>
+          {/* Stats Cards Row */}
+          <div className="flex gap-4">
+            {/* UMKM Terdaftar */}
+            <div className="flex-1 p-6 bg-white shadow-md rounded-xl items-center">
+              <h4 className="text-xl font-semibold">UMKM Terdaftar</h4>
+              <p className="mt-2 text-4xl font-bold">{UMKM_STATS.total}</p>
+              <div className="flex items-center gap-3 mt-20">
+                <HiArrowCircleUp className="text-[var(--yellow-umkm)]" />
+                <p className="text-sm text-gray-500">+{UMKM_STATS.monthly_increase} bulan ini</p>
+              </div>
             </div>
+
+            {/* UMKM Per Kabupaten */}
+            <div className="flex-1 p-6 bg-white shadow-md rounded-xl">
+              <h4 className="text-xl font-semibold">UMKM Perkabupaten</h4>
+              <div className="mt-4 space-y-3">
+                <div className="flex justify-between items-center">
+                  <span className="text-lg">Pamekasan</span>
+                  <span className="text-3xl font-bold">{UMKM_STATS.pamekasan}</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-lg">Sumenep</span>
+                  <span className="text-3xl font-bold">{UMKM_STATS.sumenep}</span>
+                </div>
+              </div>
+              <div className="flex items-center gap-3 mt-14">
+                <HiArrowCircleUp className="text-[var(--yellow-umkm)]" />
+                <p className="text-sm text-gray-500">+{UMKM_STATS.monthly_increase} bulan ini</p>
+              </div>
+            </div>
+          </div>
         </div>
+
+        {/* Right Column - UMKM Per Kecamatan (Table) */}
+        <div className="w-96 bg-white rounded-xl p-6 shadow-md ">
+          <h4 className="text-xl font-semibold mb-4">UMKM Per Kecamatan</h4>
+          <div className="h-64 overflow-y-auto">
+            <table className="w-full">
+              <tbody>
+                {KECAMATAN_DATA.map((kecamatan, index) => (
+                  <tr key={index} className="border-b border-gray-200 last:border-b-0">
+                    <td className="py-3 text-sm">{kecamatan.name}</td>
+                    <td className="py-3 text-sm text-right font-semibold">{kecamatan.count}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      {/* Map & Chart Section - Using Flexbox */}
+      <div className="flex gap-4">
+        {/* Map */}
+        <div className="flex-1 p-6 bg-white shadow-md rounded-xl">
+          <h4 className="mb-4 text-xl font-semibold">Peta UMKM</h4>
+          <div className="relative w-full h-[300px]">
+            <Image
+              src={dashboardMap}
+              alt="Map UMKM"
+              fill
+              className="object-cover"
+            />
+          </div>
+        </div>
+
+        {/* Chart */}
+        <div className="flex-1 p-6 bg-white shadow-md rounded-xl">
+          <h4 className="mb-4 text-xl font-semibold">Pertumbuhan UMKM</h4>
+          <ReactApexChart
+            options={chartData.options}
+            series={chartData.series}
+            type="line"
+            height={300}
+          />
+        </div>
+      </div>
     </div>
   );
 };
