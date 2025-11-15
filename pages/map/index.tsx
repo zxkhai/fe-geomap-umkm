@@ -1,27 +1,37 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { CiSearch } from "react-icons/ci";
 import dynamic from "next/dynamic";
 import PopSlideDetail from "@/components/maps/PopSlideDetail";
+import { UMKM } from "@/lib/api/umkm";
+import { umkmService } from "@/lib/services/umkmService";
 
 const MapRBI = dynamic(() => import('@/components/maps/MapRBI'), { ssr: false });
-
-interface UMKM {
-  id: number;
-  name: string;
-  description: string;
-  lat: number;
-  lng: number;
-  photo: string;
-  location?: string;
-  address?: string;
-  phone?: string;
-  history?: string;
-}
 
 export default function MapPage() {
   const [activeFilter, setActiveFilter] = useState<string>("Semua");
   const [selectedUMKM, setSelectedUMKM] = useState<UMKM | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
+  const [umkmData, setUmkmData] = useState<UMKM[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    fetchUMKMData();
+  }, []);
+
+  const fetchUMKMData = async () => {
+    try {
+      setLoading(true);
+      const result = await umkmService.getAll();
+      if (result.success && result.data) {
+        setUmkmData(result.data);
+      }
+    } catch (error) {
+      console.error("Error fetching UMKM data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleMarkerClick = (umkm: UMKM) => {
     setSelectedUMKM(umkm);
@@ -38,6 +48,16 @@ export default function MapPage() {
     { name: "Pamekasan", value: "Pamekasan" },
     { name: "Sumenep", value: "Sumenep" },
   ];
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-16 bg-white">
+        <div className="flex justify-center items-center h-screen">
+          <div className="text-xl">Loading map data...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-16 bg-white">
@@ -56,6 +76,8 @@ export default function MapPage() {
           <input
             type="text"
             placeholder="Cari daerah/makanan"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full border border-gray-300 rounded-full px-4 py-2 pr-12 focus:outline-none"
           />
           <CiSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-2xl pointer-events-none" />
@@ -78,7 +100,12 @@ export default function MapPage() {
       </div>
 
       {/* Map Placeholder */}
-      <MapRBI filter={activeFilter} onMarkerClick={handleMarkerClick} />
+      <MapRBI 
+        filter={activeFilter} 
+        onMarkerClick={handleMarkerClick}
+        umkmData={umkmData}
+        searchQuery={searchQuery}
+      />
 
       {/* Pop Slide Detail */}
       <PopSlideDetail
@@ -87,12 +114,12 @@ export default function MapPage() {
         umkm={
           selectedUMKM
             ? {
-                name: selectedUMKM.name,
-                location: selectedUMKM.location || '',
-                history: selectedUMKM.history || selectedUMKM.description,
+                name: selectedUMKM.name || '',
+                location: selectedUMKM.regency || '',
+                story: selectedUMKM.story || '',
                 address: selectedUMKM.address || '',
                 phone: selectedUMKM.phone || '',
-                image: selectedUMKM.photo,
+                image: selectedUMKM.product_pict || '/umkm/default.jpg',
               }
             : null
         }

@@ -1,49 +1,66 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { MdDeleteOutline } from "react-icons/md";
 import Protected from "@/components/auth/Protected";
-
-const initialUmkmDatas = [
-  {
-    id: 1, name: "Tajin Sobih Bu Aminah", owner: "Hj. Aminah",
-    regency: "Pamekasan", latitude: -7.071, longitude: 113.49,
-  },
-  {
-    id: 2, name: "Tahu Tempe 99", owner: "Budi Santoso",
-    regency: "Sidoarjo", latitude: -7.34, longitude: 112.73,
-  },
-  {
-    id: 3, name: "Sate Lalat Pak Memet", owner: "Muhammad Memet",
-    regency: "Pamekasan", latitude: -7.15, longitude: 113.47,
-  },
-  {
-    id: 4, name: "Kaldu Kokot Sumenep", owner: "Siti Nurhaliza",
-    regency: "Sumenep", latitude: -7.01, longitude: 113.87,
-  },
-  {
-    id: 5, name: "Rujak Cingur Bu Dewi", owner: "Dewi Sartika",
-    regency: "Surabaya", latitude: -7.25, longitude: 112.75,
-  },
-];
+import { umkmService } from "@/lib/services/umkmService";
+import type { UMKM } from "@/lib/api/umkm";
 
 export default function DataUmkmPage() {
-  const [umkmList, setUmkmList] = useState(initialUmkmDatas);
+  const [umkmList, setUmkmList] = useState<UMKM[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteId, setDeleteId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
+  // Fetch UMKM data on component mount
+  useEffect(() => {
+    const fetchUmkmData = async () => {
+      try {
+        const result = await umkmService.getAll();
+        if (result.success && result.data) {
+          setUmkmList(result.data);
+        } else {
+          setError(result.error || "Gagal memuat data UMKM");
+        }
+      } catch (err) {
+        setError("Terjadi kesalahan saat memuat data UMKM");
+        console.error("UMKM fetch error:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchUmkmData();
+  }, []);
 
   const handleDeleteClick = (id: number) => {
     setDeleteId(id);
     setShowDeleteModal(true);
   };
 
-  const handleConfirmDelete = () => {
+  const handleConfirmDelete = async () => {
     if (deleteId !== null) {
-      setUmkmList((prev) => prev.filter((u) => u.id !== deleteId));
+      setIsDeleting(true);
+      try {
+        const result = await umkmService.delete(deleteId);
+        if (result.success) {
+          // Remove from list on successful delete
+          setUmkmList((prev) => prev.filter((u) => u.id !== deleteId));
+          setShowDeleteModal(false);
+          setDeleteId(null);
+        } else {
+          alert(result.error || "Gagal menghapus data UMKM");
+        }
+      } catch (err) {
+        alert("Terjadi kesalahan saat menghapus data");
+        console.error("Delete error:", err);
+      } finally {
+        setIsDeleting(false);
+      }
     }
-    setShowDeleteModal(false);
-    setDeleteId(null);
   };
 
   const handleCancelDelete = () => {
@@ -56,30 +73,50 @@ export default function DataUmkmPage() {
     <div className="max-w-full mx-auto">
       <div className="flex justify-between items-center mb-5">
         <h1 className="text-xl font-semibold mb-4 text-black">Data UMKM</h1>
-        <Link href="/admin/umkm/add" className="flex items-center gap-3 bg-black text-white px-10 py-1 rounded-lg">
+        <Link href="/admin/umkm/add" className="flex items-center gap-3 bg-black text-white px-10 py-1 rounded-lg hover:bg-gray-800 transition-colors">
           Tambah
           <FaPlus />
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg overflow-hidden border">
-        <table className="w-full text-sm text-gray-900">
-          <thead>
-            <tr className="bg-gray-300 text-black">
-              {["No.", "Nama UMKM", "Pemilik", "Kabupaten", "Latitude", "Longitude", "Aksi"].map(h => (
-                <th key={h} className="text-center px-5 py-3 font-bold">{h}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {umkmList.map((umkm, index) => (
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]">
+              <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+                Loading...
+              </span>
+            </div>
+            <p className="mt-4 text-gray-600">Memuat data UMKM...</p>
+          </div>
+        </div>
+      ) : error ? (
+        <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
+          {error}
+        </div>
+      ) : umkmList.length === 0 ? (
+        <div className="text-center py-12 bg-gray-50 rounded-lg">
+          <p className="text-gray-500">Belum ada data UMKM</p>
+        </div>
+      ) : (
+        <div className="bg-white rounded-lg overflow-hidden border">
+          <table className="w-full text-sm text-gray-900">
+            <thead>
+              <tr className="bg-gray-300 text-black">
+                {["No.", "Nama UMKM", "Pemilik", "Kabupaten", "Latitude", "Longitude", "Aksi"].map(h => (
+                  <th key={h} className="text-center px-5 py-3 font-bold">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {umkmList.map((umkm, index) => (
               <tr key={umkm.id} className="border-t hover:bg-gray-50 text-black">
                 <td className="px-5 py-4 text-center">{index + 1}</td>
                 <td className="px-5 py-4">{umkm.name}</td>
                 <td className="px-5 py-4 text-center">{umkm.owner}</td>
                 <td className="px-5 py-4 text-center">{umkm.regency}</td>
-                <td className="px-5 py-4 text-center">{umkm.latitude}</td>
-                <td className="px-5 py-4 text-center">{umkm.longitude}</td>
+                <td className="px-5 py-4 text-center">{umkm.location.latitude}</td>
+                <td className="px-5 py-4 text-center">{umkm.location.longitude}</td>
                 <td className="px-5 py-4 text-center">
                   <div className="inline-flex items-center gap-2 justify-center">
                     <Link
@@ -100,10 +137,11 @@ export default function DataUmkmPage() {
                   </div>
                 </td>
               </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
 
       {/* Delete Confirmation Modal */}
       {showDeleteModal && (
@@ -122,15 +160,17 @@ export default function DataUmkmPage() {
             <div className="flex items-center justify-center gap-3 w-full">
               <button
                 onClick={handleCancelDelete}
-                className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-400 font-medium transition-colors w-1/2 hover:cursor-pointer"
+                disabled={isDeleting}
+                className="px-6 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-400 font-medium transition-colors w-1/2 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Batal
               </button>
               <button
                 onClick={handleConfirmDelete}
-                className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors w-1/2 hover:cursor-pointer"
+                disabled={isDeleting}
+                className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 font-medium transition-colors w-1/2 hover:cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Hapus
+                {isDeleting ? "Menghapus..." : "Hapus"}
               </button>
             </div>
           </div>

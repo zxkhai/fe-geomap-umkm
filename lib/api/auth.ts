@@ -7,7 +7,7 @@ export interface LoginData {
 
 export interface UserProfile {
   id: number;
-  name: string;
+  username: string;
   email: string;
   createdAt?: string;
   updatedAt?: string;
@@ -47,7 +47,7 @@ export const authApi = {
       body: JSON.stringify(data),
     });
     const result = await handleResponse<{ message: string; data: { user: UserProfile; token: string } }>(response);
-    
+
     return {
       message: result.message,
       token: result.data.token,
@@ -61,7 +61,8 @@ export const authApi = {
       method: 'GET',
       headers: createHeaders(true),
     });
-    return handleResponse(response);
+    const result = await handleResponse<UserProfile | { data: UserProfile }>(response);
+    return 'data' in result ? result.data : result;
   },
 
   // Update user profile

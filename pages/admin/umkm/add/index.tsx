@@ -10,7 +10,7 @@ export default function AddUmkmPage() {
         <p className="text-[var(--yellow-umkm)] text-sm">Tambah</p>
       </div>
 
-      <FormUMKM />
+      <FormUMKM mode="add" />
     </div>
     </Protected>
   );

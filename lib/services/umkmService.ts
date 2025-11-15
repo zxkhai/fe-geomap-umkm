@@ -28,6 +28,28 @@ export const umkmService = {
     }
   },
 
+  // Get UMKM by slug (fetches all UMKM and finds matching slug)
+  async getBySlug(slug: string) {
+    try {
+      const allUMKMResponse = await umkmApi.getAll();
+      const umkm = allUMKMResponse.data.find(u => u.slug === slug);
+      
+      if (umkm) {
+        return { success: true, data: umkm };
+      } else {
+        return { 
+          success: false, 
+          error: 'UMKM tidak ditemukan' 
+        };
+      }
+    } catch (error) {
+      return { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Failed to fetch UMKM details' 
+      };
+    }
+  },
+
   // Create new UMKM
   async create(data: CreateUMKMData) {
     try {

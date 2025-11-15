@@ -1,7 +1,11 @@
+import { useRouter } from "next/router";
 import FormUMKM from "@/components/admins/formUMKM";
 import Protected from "@/components/auth/Protected";
 
 export default function EditUmkmPage() {
+  const router = useRouter();
+  const { id } = router.query;
+
   return (
     <Protected>
     <div className="max-w-full mx-auto text-black">
@@ -10,7 +14,7 @@ export default function EditUmkmPage() {
         <p className="text-[var(--yellow-umkm)] text-sm">Edit</p>
       </div>
 
-      <FormUMKM />
+      {id && <FormUMKM mode="edit" umkmId={id as string} />}
     </div>
     </Protected>
   );

@@ -1,101 +1,60 @@
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { foodOneImage } from "@/assets";
 import FoodCardUMKM from "@/components/cards/CardUMKM";
 import { CiSearch } from "react-icons/ci";
-
-const dataUMKM = [
-  {
-    name: "Warung Soto Rujak Cak Man",
-    image: foodOneImage,
-    slug: "warung-soto-rujak-cak-man",
-  },
-  {
-    name: "Es Degan Seger Bu Wahyu",
-    image: foodOneImage,
-    slug: "es-degan-seger-bu-wahyu",
-  },
-  {
-    name: "Warung Soto Rujak Cak Man",
-    image: foodOneImage,
-    slug: "warung-soto-rujak-cak-man",
-  },
-  {
-    name: "Es Degan Seger Bu Wahyu",
-    image: foodOneImage,
-    slug: "es-degan-seger-bu-wahyu",
-  },
-  {
-    name: "Warung Soto Rujak Cak Man",
-    image: foodOneImage,
-    slug: "warung-soto-rujak-cak-man",
-  },
-  {
-    name: "Es Degan Seger Bu Wahyu",
-    image: foodOneImage,
-    slug: "es-degan-seger-bu-wahyu",
-  },
-  {
-    name: "Warung Soto Rujak Cak Man",
-    image: foodOneImage,
-    slug: "warung-soto-rujak-cak-man",
-  },
-  {
-    name: "Es Degan Seger Bu Wahyu",
-    image: foodOneImage,
-    slug: "es-degan-seger-bu-wahyu",
-  },
-  {
-    name: "Warung Soto Rujak Cak Man",
-    image: foodOneImage,
-    slug: "warung-soto-rujak-cak-man",
-  },
-  {
-    name: "Es Degan Seger Bu Wahyu",
-    image: foodOneImage,
-    slug: "es-degan-seger-bu-wahyu",
-  },
-  {
-    name: "Warung Soto Rujak Cak Man",
-    image: foodOneImage,
-    slug: "warung-soto-rujak-cak-man",
-  },
-  {
-    name: "Es Degan Seger Bu Wahyu",
-    image: foodOneImage,
-    slug: "es-degan-seger-bu-wahyu",
-  },
-  {
-    name: "Warung Soto Rujak Cak Man",
-    image: foodOneImage,
-    slug: "warung-soto-rujak-cak-man",
-  },
-  {
-    name: "Es Degan Seger Bu Wahyu",
-    image: foodOneImage,
-    slug: "es-degan-seger-bu-wahyu",
-  },
-  {
-    name: "Warung Soto Rujak Cak Man",
-    image: foodOneImage,
-    slug: "warung-soto-rujak-cak-man",
-  },
-  {
-    name: "Es Degan Seger Bu Wahyu",
-    image: foodOneImage,
-    slug: "es-degan-seger-bu-wahyu",
-  },
-];
+import { umkmService } from "@/lib/services/umkmService";
+import { UMKM } from "@/lib/api/umkm";
 
 export default function UMKMPage() {
   const [activeFilter, setActiveFilter] = useState<string>("Semua");
+  const [umkmData, setUmkmData] = useState<UMKM[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  useEffect(() => {
+    fetchUMKMData();
+  }, []);
+
+  const fetchUMKMData = async () => {
+    try {
+      setLoading(true);
+      const result = await umkmService.getAll();
+      if (result.success && result.data) {
+        setUmkmData(result.data);
+      }
+    } catch (error) {
+      console.error("Error fetching UMKM data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const filterButtons = [
     { name: "Semua", value: "Semua" },
     { name: "Pamekasan", value: "Pamekasan" },
     { name: "Sumenep", value: "Sumenep" }
   ];
+
+  // Filter UMKM data based on search and regency filter
+  const filteredUMKM = umkmData.filter((umkm) => {
+    const matchesRegency = activeFilter === "Semua" || umkm.regency === activeFilter;
+    const matchesSearch = searchQuery === "" || 
+      umkm.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      umkm.address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      umkm.regency.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    return matchesRegency && matchesSearch;
+  });
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto px-4 py-16 bg-white">
+        <div className="flex justify-center items-center h-screen">
+          <div className="text-xl">Loading UMKM data...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-16 bg-white">
@@ -110,6 +69,8 @@ export default function UMKMPage() {
           <input
             type="text"
             placeholder="Cari daerah/makanan"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full border border-gray-300 rounded-full px-4 py-2 pr-12 focus:outline-none"
           />
           <CiSearch className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-2xl pointer-events-none" />
@@ -133,11 +94,23 @@ export default function UMKMPage() {
 
       {/* Grid UMKM */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 px-3">
-        {dataUMKM.map((data, index) => (
-          <div key={index}>
-            {FoodCardUMKM({ props: data })}
+        {filteredUMKM.length > 0 ? (
+          filteredUMKM.map((umkm) => (
+            <div key={umkm.id}>
+              <FoodCardUMKM
+                props={{
+                  name: umkm.name,
+                  image: umkm.place_pict || foodOneImage,
+                  slug: `${umkm.slug}`,
+                }}
+              />
+            </div>
+          ))
+        ) : (
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-500 text-lg">Tidak ada UMKM ditemukan</p>
           </div>
-        ))}
+        )}
       </div>
     </div>
   );

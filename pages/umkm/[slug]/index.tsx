@@ -1,53 +1,67 @@
-import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { foodOneImage } from "@/assets";
+import { useState, useEffect } from "react";
 import { IoLocation } from "react-icons/io5";
 import { BsTelephone } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
-
-const umkmData = [
-  {
-    slug: "warung-soto-rujak-cak-man",
-    name: "Warung Soto Rujak Cak Man",
-    location: "Sumenep",
-    type : "Makanan Berat",
-    image: foodOneImage,
-    description:
-      "Warung Soto Rujak Cak Man terkenal dengan cita rasa otentik dan bahan-bahan lokal segar.",
-    address: "Jl. Raya Lenteng No.12, Sumenep, Jawa Timur",
-    contact: "081234567890",
-    hours: "Senin – Minggu: 08.00 – 20.00",
-  },
-  {
-    slug: "es-degan-seger-bu-wahyu",
-    name: "Es Degan Seger Bu Wahyu",
-    location: "Pamekasan",
-    type : "Minuman",
-    image: foodOneImage,
-    description:
-      "Es Degan Seger Bu Wahyu menyajikan kesegaran kelapa muda alami dengan sirup khas Madura.",
-    address: "Jl. Niaga No.45, Pamekasan, Jawa Timur",
-    contact: "085331234639",
-    hours: "Setiap Hari: 09.00 – 21.00",
-  },
-];
+import { umkmService } from "@/lib/services/umkmService";
+import { UMKM } from "@/lib/api/umkm";
 
 export default function UmkmDetailPage() {
   const router = useRouter();
-  const { slug } = router.query; // ✅ ambil slug dari router
-  const umkm = umkmData.find((u) => u.slug === slug);
+  const { slug } = router.query; // Slug from URL
+  const [umkm, setUmkm] = useState<UMKM | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  if (!umkm)
+  useEffect(() => {
+    if (!slug || typeof slug !== 'string') return;
+
+    const fetchUMKMDetail = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Fetch UMKM by slug
+        const result = await umkmService.getBySlug(slug);
+        
+        if (result.success && result.data) {
+          setUmkm(result.data);
+        } else {
+          setError(result.error || "UMKM tidak ditemukan");
+        }
+      } catch (err) {
+        console.error("Error fetching UMKM detail:", err);
+        setError("Gagal memuat data UMKM");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUMKMDetail();
+  }, [slug]);
+
+  if (loading) {
     return (
-      <div className="text-center py-20 text-gray-500">UMKM tidak ditemukan.</div>
+      <div className="text-center py-20">
+        <div className="text-xl">Loading...</div>
+      </div>
     );
+  }
+
+  if (error || !umkm) {
+    return (
+      <div className="text-center py-20 text-gray-500">
+        {error || "UMKM tidak ditemukan."}
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-6xl mx-auto py-16 px-4 grid md:grid-cols-2 gap-10">
       <div>
         <Image
-          src={umkm.image}
+          src={umkm.product_pict ?? "/placeholder.png"}
           alt={umkm.name}
           width={600}
           height={400}
@@ -60,24 +74,71 @@ export default function UmkmDetailPage() {
         <div className="flex text-[var(--yellow-umkm)] items-center gap-2 text-sm mb-6">
           <IoLocation />
           <p>
-            {umkm.location} / {umkm.type}
+            {umkm.regency} / {umkm.classification || umkm.type || "UMKM"}
           </p>
         </div>
 
-        <h2 className="font-semibold mb-2">Sejarah</h2>
-        <p className="text-gray-700 mb-4">{umkm.description}</p>
+        {umkm.story && (
+          <>
+            <h2 className="font-semibold mb-2">Sejarah</h2>
+            <p className="text-gray-700 mb-4">{umkm.story}</p>
+          </>
+        )}
+
+        <h2 className="font-semibold mb-2">Pemilik</h2>
+        <p className="text-gray-700 mb-4">{umkm.owner}</p>
 
         <h2 className="font-semibold mb-2">Alamat</h2>
         <p className="text-gray-700 mb-4">{umkm.address}</p>
 
         <h2 className="font-semibold mb-2">Kontak</h2>
-        <p className="text-gray-700 mb-4 flex items-center gap-2"><BsTelephone /> {umkm.contact}</p>
+        <p className="text-gray-700 mb-4 flex items-center gap-2">
+          <BsTelephone /> {umkm.phone}
+        </p>
 
-        <h2 className="font-semibold mb-2">Jam Operasional</h2>
-        <p className="text-gray-700 mb-6">{umkm.hours}</p>
+        {umkm.year && (
+          <>
+            <h2 className="font-semibold mb-2">Tahun Berdiri</h2>
+            <p className="text-gray-700 mb-4">{umkm.year}</p>
+          </>
+        )}
 
-        <Link
-          href="/map"
+        {umkm.payment && (
+          <>
+            <h2 className="font-semibold mb-2">Metode Pembayaran</h2>
+            <p className="text-gray-700 mb-4">{umkm.payment}</p>
+          </>
+        )}
+
+        {umkm.order && (
+          <>
+            <h2 className="font-semibold mb-2">Cara Pemesanan</h2>
+            <p className="text-gray-700 mb-6">{umkm.order}</p>
+          </>
+        )}
+
+        {umkm.medsos && umkm.medsos.length > 0 && (
+          <>
+            <h2 className="font-semibold mb-2">Media Sosial</h2>
+            <div className="flex flex-col gap-2 mb-6">
+              {umkm.medsos.map((social, index) => (
+                <a
+                  key={index}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline flex items-center gap-2"
+                >
+                  <span className="font-medium">{social.platform}:</span>
+                  <span>@{social.username}</span>
+                </a>
+              ))}
+            </div>
+          </>
+        )}
+
+        <a
+          href={`tel:${umkm.phone}`}
           className="group w-full flex items-center justify-between gap-3 bg-black text-white px-6 py-3 rounded-full hover:bg-white hover:outline-black hover:outline-2 transition-colors"
         >
           <p className="group-hover:text-black font-medium transition-colors">Hubungi</p>
@@ -86,7 +147,7 @@ export default function UmkmDetailPage() {
               <FaArrowRight className="w-3 h-auto text-black group-hover:text-white transition-colors" />
             </div>
           </div>
-        </Link>
+        </a>
       </div>
     </div>
   );
