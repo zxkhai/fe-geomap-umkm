@@ -1,7 +1,7 @@
 import { API_BASE_URL, createHeaders, handleResponse } from './client';
 
 export interface LoginData {
-  email: string;
+  username: string;
   password: string;
 }
 
@@ -46,7 +46,13 @@ export const authApi = {
       headers: createHeaders(false),
       body: JSON.stringify(data),
     });
-    return handleResponse(response);
+    const result = await handleResponse<{ message: string; data: { user: UserProfile; token: string } }>(response);
+    
+    return {
+      message: result.message,
+      token: result.data.token,
+      user: result.data.user,
+    };
   },
 
   // Get user profile
