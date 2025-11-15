@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, GeoJSON, Marker, Popup } from 'react-leaflet';
 import { useEffect, useState } from 'react';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
+import { UMKM } from '@/lib/api/umkm';
 
 interface GeoLayer {
   name: string;
@@ -11,57 +12,32 @@ interface GeoLayer {
   style: any;
 }
 
-export interface UMKM {
+interface MapUMKM {
   id: number;
   name: string;
-  description: string;
   lat: number;
   lng: number;
   photo: string;
-  location?: string;
+  regency: string;
   address?: string;
   phone?: string;
-  history?: string;
+  story?: string;
 }
 
-export const umkmData: UMKM[] = [
-  {
-    id: 1,
-    name: 'Tajin Sobih Bu Aminah',
-    description: 'Legenda',
-    lat: -7.071,
-    lng: 113.49,
-    photo: '/umkm/tajin-sobih.jpg',
-    location: 'Pamekasan',
-    address: 'Jl. Pintu Gerbang No.126, Pertanian, Bugih, Kec. Pamekasan, Kabupaten Pamekasan, Jawa Timur 69317',
-    phone: '+62 813 4455 9988',
-    history: 'Nasi Rames atau yang di Pamekasan lebih dikenal dengan sebutan "Nasi Ramoy" (dalam logat Madura, "ramey" sering "ramoy") adalah sajian nasi campur yang mencerminkan kekayaan kuliner budaya di Madura. Kuliner ini berkembang seiring...',
-  },
-  {
-    id: 2,
-    name: 'Sate Lalat Pak Memet',
-    description: 'Khas Pamekasan',
-    lat: -7.15,
-    lng: 113.47,
-    photo: '/umkm/sate-lalat.jpg',
-    location: 'Pamekasan',
-    address: 'Jl. Raya Pamekasan No. 45, Kecamatan Pamekasan, Jawa Timur',
-    phone: '+62 812 3456 7890',
-    history: 'Sate Lalat adalah kuliner khas Pamekasan yang terkenal dengan ukuran sate yang kecil-kecil seperti lalat. Dibuat dari daging sapi pilihan dengan bumbu rempah khas Madura.',
-  },
-  {
-    id: 3,
-    name: 'Kaldu Kokot Sumenep',
-    description: 'Kuliner ikonik',
-    lat: -7.01,
-    lng: 113.87,
-    photo: '/umkm/kaldu-kokot.jpg',
-    location: 'Sumenep',
-    address: 'Jl. Trunojoyo No. 78, Kecamatan Sumenep, Jawa Timur',
-    phone: '+62 811 2233 4455',
-    history: 'Kaldu Kokot adalah makanan tradisional khas Sumenep yang terbuat dari daging sapi dengan kuah kaldu yang kaya rempah. Sudah menjadi ikon kuliner Sumenep sejak puluhan tahun.',
-  },
-];
+// Transform API UMKM data to MapUMKM format
+const transformUMKMData = (umkmList: UMKM[]): MapUMKM[] => {
+  return umkmList.map(umkm => ({
+    id: umkm.id,
+    name: umkm.name,
+    lat: umkm.location.latitude,
+    lng: umkm.location.longitude,
+    photo: umkm.place_pict || '/umkm/default.jpg',
+    regency: umkm.regency,
+    address: umkm.address,
+    phone: umkm.phone,
+    story: umkm.story,
+  }));
+};
 
 const createIcon = (photo: string) =>
   L.divIcon({
@@ -98,13 +74,20 @@ const createIcon = (photo: string) =>
 
 export default function RBImap({ 
   filter = 'Semua',
-  onMarkerClick 
+  onMarkerClick,
+  umkmData = [],
+  searchQuery = ''
 }: { 
   filter?: string;
   onMarkerClick?: (umkm: UMKM) => void;
+  umkmData?: UMKM[];
+  searchQuery?: string;
 }) {
   const [pamekasanLayers, setPamekasanLayers] = useState<GeoLayer[]>([]);
   const [sumenepLayers, setSumenepLayers] = useState<GeoLayer[]>([]);
+  
+  // Transform UMKM data for map display
+  const mapUMKMData = transformUMKMData(umkmData);
 
   // Calculate distance between two coordinates (in kilometers)
   const calculateDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
@@ -119,48 +102,91 @@ export default function RBImap({
     return R * c;
   };
 
-  // Check if a road segment is near any UMKM point
-  const isRoadNearUMKM = (coordinates: any, umkmList: UMKM[], maxDistance: number = 1): boolean => {
-    if (!coordinates || coordinates.length === 0) return false;
+  // Check if point is on the line between two points (with tolerance)
+  const isPointBetween = (pointLat: number, pointLng: number, lat1: number, lng1: number, lat2: number, lng2: number, tolerance: number = 0.01): boolean => {
+    // Calculate distances
+    const d1 = calculateDistance(pointLat, pointLng, lat1, lng1);
+    const d2 = calculateDistance(pointLat, pointLng, lat2, lng2);
+    const d12 = calculateDistance(lat1, lng1, lat2, lng2);
+    
+    // Point is "between" if sum of distances to both ends ≈ distance between ends
+    const distanceSum = d1 + d2;
+    const difference = Math.abs(distanceSum - d12);
+    
+    return difference <= tolerance;
+  };
+
+  // Check if a road segment is positioned between two UMKMs (forms a corridor)
+  const isRoadConnectingUMKMs = (coordinates: any, umkmList: MapUMKM[]): boolean => {
+    if (!coordinates || coordinates.length === 0 || umkmList.length < 2) return false;
 
     // Flatten coordinates if nested (MultiLineString)
     const flatCoords = Array.isArray(coordinates[0][0]) 
       ? coordinates.flat() 
       : coordinates;
 
-    // Check if any point in the road is near any UMKM
-    for (const coord of flatCoords) {
-      const [lng, lat] = coord;
-      for (const umkm of umkmList) {
-        const distance = calculateDistance(lat, lng, umkm.lat, umkm.lng);
-        if (distance <= maxDistance) {
+    // Try all UMKM pairs to see if this road is between any pair
+    for (let i = 0; i < umkmList.length; i++) {
+      for (let j = i + 1; j < umkmList.length; j++) {
+        const umkm1 = umkmList[i];
+        const umkm2 = umkmList[j];
+        
+        // Check if any point on the road is between these two UMKMs
+        let pointsBetween = 0;
+        for (const coord of flatCoords) {
+          const [lng, lat] = coord;
+          if (isPointBetween(lat, lng, umkm1.lat, umkm1.lng, umkm2.lat, umkm2.lng, 1.0)) {
+            pointsBetween++;
+          }
+        }
+        
+        // If at least 30% of road points are between these UMKMs, this road connects them
+        const percentageBetween = pointsBetween / flatCoords.length;
+        if (percentageBetween >= 0.3) {
+          console.log(`✅ Road connects ${umkm1.name} ↔ ${umkm2.name} (${(percentageBetween * 100).toFixed(1)}% points between)`);
           return true;
         }
       }
     }
+
     return false;
   };
 
-  // Filter roads to only show main roads near UMKM points
-  const filterMainRoads = (roadData: any, kabupaten: string): any => {
+  // Filter roads to only show roads connecting between UMKMs
+  const filterConnectingRoads = (roadData: any, kabupaten: string): any => {
     if (!roadData || !roadData.features) return roadData;
 
-    const relevantUMKM = umkmData.filter(u => u.location === kabupaten);
+    // Use ALL UMKMs for road connectivity (cross-regency connections allowed)
+    const allUMKM = mapUMKMData;
+
+    console.log('🔍 filterConnectingRoads called:', {
+      kabupaten,
+      totalMapUMKM: allUMKM.length,
+      mapUMKMSample: allUMKM.slice(0, 2),
+      allRegencies: [...new Set(allUMKM.map(u => u.regency))],
+      totalRoadFeatures: roadData.features.length
+    });
+    
+    // If less than 2 UMKMs globally, no roads should be shown
+    if (allUMKM.length < 2) {
+      console.log(`⚠️ Not enough total UMKMs (${allUMKM.length} < 2), hiding all roads`);
+      return {
+        ...roadData,
+        features: []
+      };
+    }
+    
+    console.log(`✅ Found ${allUMKM.length} total UMKMs, filtering ${roadData.features.length} road segments in ${kabupaten}...`);
     
     const filteredFeatures = roadData.features.filter((feature: any) => {
-      // Keep major roads (jalan utama) based on road type if available
-      const roadType = feature.properties?.REMARK || feature.properties?.NAMOBJ || '';
-      const isMajorRoad = roadType.toLowerCase().includes('utama') || 
-                          roadType.toLowerCase().includes('provinsi') ||
-                          roadType.toLowerCase().includes('nasional') ||
-                          roadType.toLowerCase().includes('kolektor');
-
-      // Check if road is near UMKM points
       const coordinates = feature.geometry?.coordinates;
-      const isNearUMKM = isRoadNearUMKM(coordinates, relevantUMKM, 1.5); // 1.5 km radius
-
-      return isMajorRoad || isNearUMKM;
+      
+      // Only show roads that are positioned between UMKMs (corridor-based filtering)
+      const isConnecting = isRoadConnectingUMKMs(coordinates, allUMKM);
+      return isConnecting;
     });
+
+    console.log(`🛣️ Filtered roads result: ${filteredFeatures.length} of ${roadData.features.length} roads connecting UMKMs`);
 
     return {
       ...roadData,
@@ -184,15 +210,19 @@ export default function RBImap({
 
         let style = {};
         if (file.includes('adm_desa')) {
+          // Layer kabupaten selalu aktif
           style = { color, weight: 0, fillOpacity: 0.5 };
+          results.push({ name: file, data, style });
         }
         if (file.includes('jalan')) {
-          // Filter roads to show only main roads near UMKM
-          data = filterMainRoads(data, kabupaten);
+          // Filter roads to show only roads connecting between UMKMs
+          data = filterConnectingRoads(data, kabupaten);
           style = { color: roadColor ?? 'orange', weight: 2 };
+          // Hanya push layer jalan jika ada data setelah filter
+          if (data.features && data.features.length > 0) {
+            results.push({ name: file, data, style });
+          }
         }
-
-        results.push({ name: file, data, style });
       } catch (err) {
         console.error(`Gagal load ${file} untuk ${kabupaten}`, err);
       }
@@ -202,9 +232,10 @@ export default function RBImap({
   };
 
   useEffect(() => {
-    loadKabupatenData('pamekasan', '#22c55e', '#d97706').then(setPamekasanLayers);
-    loadKabupatenData('sumenep', '#2fdb04', '#facc15').then(setSumenepLayers);
-  }, []);
+    // Load kabupaten data (always show layers, but roads depend on UMKM)
+    loadKabupatenData('pamekasan', '#22c55e', '#0000ab').then(setPamekasanLayers);
+    loadKabupatenData('sumenep', '#2fdb04', '#0000ab').then(setSumenepLayers);
+  }, [umkmData.length, filter, searchQuery]);
 
   return (
     <MapContainer
@@ -227,23 +258,39 @@ export default function RBImap({
           <GeoJSON key={`sumenep-${i}`} data={layer.data} style={layer.style} />
         ))}
 
-      {umkmData
-        .filter((u) => filter === 'Semua' || u.location === filter)
-        .map((u) => (
-          <Marker 
-            key={u.id} 
-            position={[u.lat, u.lng]} 
-            icon={createIcon(u.photo)}
-            eventHandlers={{
-              click: () => {
-                if (onMarkerClick) {
-                  onMarkerClick(u);
-                }
-              },
-            }}
-          >
-          </Marker>
-        ))}
+      {mapUMKMData
+        .filter((u) => {
+          // Filter by regency
+          const matchesRegency = filter === 'Semua' || u.regency === filter;
+          
+          // Filter by search query
+          const matchesSearch = searchQuery === '' || 
+            u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            u.address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            u.regency.toLowerCase().includes(searchQuery.toLowerCase());
+          
+          return matchesRegency && matchesSearch;
+        })
+        .map((mapUmkm) => {
+          // Find the original UMKM object to pass to onMarkerClick
+          const originalUmkm = umkmData.find(u => u.id === mapUmkm.id);
+          
+          return (
+            <Marker 
+              key={mapUmkm.id} 
+              position={[mapUmkm.lat, mapUmkm.lng]} 
+              icon={createIcon(mapUmkm.photo)}
+              eventHandlers={{
+                click: () => {
+                  if (onMarkerClick && originalUmkm) {
+                    onMarkerClick(originalUmkm);
+                  }
+                },
+              }}
+            >
+            </Marker>
+          );
+        })}
     </MapContainer>
   );
 }

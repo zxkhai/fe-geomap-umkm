@@ -8,7 +8,7 @@ interface PopSlideDetailProps {
   umkm: {
     name: string;
     location: string;
-    history: string;
+    story: string;
     address: string;
     phone: string;
     image: string;
@@ -69,7 +69,7 @@ export default function PopSlideDetail({ isOpen, onClose, umkm }: PopSlideDetail
           <div>
             <h4 className="font-bold mb-2">Sejarah</h4>
             <p className="text-sm text-gray-700 leading-relaxed">
-              {umkm.history}
+              {umkm.story}
             </p>
             <button className="text-sm text-blue-600 hover:underline mt-1">
               Baca selengkapnya
