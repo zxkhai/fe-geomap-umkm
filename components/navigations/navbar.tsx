@@ -51,7 +51,7 @@ export default function Navbar() {
           <div className={`absolute inset-0 flex items-center justify-${isEnglish ? "end" : "start"} px-1`}>
             <div
               className={`w-[65%] h-7 bg-[var(--yellow-umkm)] rounded-full transition-transform duration-300 ease-in-out ${
-                isEnglish ? "translate-x-[55%]" : "translate-x-0"
+                isEnglish ? "translate-x-[5%]" : "translate-x-0"
               }`}
             ></div>
           </div>
