@@ -12,6 +12,7 @@ interface PopSlideDetailProps {
     address: string;
     phone: string;
     image: string;
+    slug?: string;
   } | null;
 }
 
@@ -34,7 +35,7 @@ export default function PopSlideDetail({ isOpen, onClose, umkm }: PopSlideDetail
       }`}>
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-bold">UMKM Details</h2>
+          <h2 className="text-xl font-bold">Detail Kuliner</h2>
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -68,12 +69,18 @@ export default function PopSlideDetail({ isOpen, onClose, umkm }: PopSlideDetail
           {/* History Section */}
           <div>
             <h4 className="font-bold mb-2">Sejarah</h4>
-            <p className="text-sm text-gray-700 leading-relaxed">
-              {umkm.story}
+            <p className="text-sm text-gray-700 leading-relaxed text-justify">
+              {(() => {
+                const words = umkm.story.trim().split(/\s+/).filter(Boolean);
+                const truncated = words.length > 50 ? words.slice(0, 50).join(' ') + '...' : umkm.story;
+                return truncated;
+              })()}
             </p>
-            <button className="text-sm text-blue-600 hover:underline mt-1">
-              Baca selengkapnya
-            </button>
+            {umkm.slug && umkm.story.trim().split(/\s+/).filter(Boolean).length > 50 && (
+              <Link href={`/umkm/${umkm.slug}`} className="text-sm text-[var(--yellow-umkm)] hover:underline mt-1 inline-block">
+                Baca selengkapnya
+              </Link>
+            )}
           </div>
 
           {/* Address Section */}

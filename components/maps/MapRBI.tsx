@@ -66,9 +66,10 @@ export default function RBImap({
 
   return (
     <MapContainer
-      center={[-7.11667, 113.33333]}
-      zoom={9}
-      style={{ height: '90vh', width: '100%' }}
+      center={[-7.11667, 113.63333]}
+      zoom={10}
+      style={{ height: '30vh', width: '100%' }}
+      className="md:!h-[90vh]"
     >
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'

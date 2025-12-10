@@ -8,34 +8,34 @@ export default function AboutPage() {
     <>  
       {/* HERO SECTION */}
       <section
-        className="w-full h-[540px] px-4 items-center flex"
+        className="w-full min-h-[300px] md:h-[540px] px-4 py-12 md:py-0 items-center flex"
         style={{
           backgroundImage: `url(${typeof heroAbout === 'string' ? heroAbout : heroAbout.src})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center'
         }}
       >
-        <div className="max-w-7xl px-12 flex-col text-white">
-          <p className="font-bold text-5xl my-2">Tentang</p>
-          <p className="text-[var(--yellow-umkm)] font-semibold text-5xl my-2">GeoKuliner</p>
-          <p className="max-w-xl text-xl my-8">Platform digital resmi dari Dinas Pariwisata Kabupaten Pamekasan & Sampang yang hadir untuk mendukung perkembangan UMKM lokal agar semakin maju, dikenal luas, dan berdaya saing di era digital.</p>
+        <div className="max-w-7xl px-4 md:px-12 flex-col text-white">
+          <p className="font-bold text-3xl md:text-5xl my-2">Tentang</p>
+          <p className="text-[var(--yellow-umkm)] font-semibold text-3xl md:text-5xl my-2">Geo Kuliner</p>
+          <p className="max-w-xl text-sm md:text-xl my-4 md:my-8">Platform digital resmi dari Dinas Pariwisata Kabupaten Pamekasan & Sampang yang hadir untuk mendukung perkembangan UMKM lokal agar semakin maju, dikenal luas, dan berdaya saing di era digital.</p>
         </div>
       </section>
 
       {/* VISI & MISI */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <h2 className="text-3xl font-bold mb-8 text-center">
+      <section className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
+        <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center">
           Visi & <span className="text-[var(--yellow-umkm)]">Misi</span>
         </h2>
 
-        <div className="bg-gray-200 rounded-2xl p-6 text-center mb-8 text-lg">
+        <div className="bg-gray-200 rounded-2xl p-4 md:p-6 text-center mb-6 md:mb-8 text-sm md:text-lg">
           <h3 className="font-semibold mb-2">Visi</h3>
           <p>
             Mewujudkan UMKM lokal yang berdaya saing, inovatif, dan berkelanjutan melalui teknologi digital.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {[
             "Memberikan ruang promosi bagi UMKM daerah.",
             "Menyediakan informasi yang akurat & mudah diakses.",
@@ -44,7 +44,7 @@ export default function AboutPage() {
           ].map((text, i) => (
             <div
               key={i}
-              className="bg-gray-200 rounded-2xl p-6 shadow-sm text-center text-lg"
+              className="bg-gray-200 rounded-2xl p-4 md:p-6 shadow-sm text-center text-sm md:text-lg"
             >
               <h4 className="text-[var(--yellow-umkm)] font-semibold mb-2">Misi</h4>
               <p>{text}</p>
@@ -54,8 +54,8 @@ export default function AboutPage() {
       </section>
 
       {/* GALLERY */}
-      <section className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-4 gap-3"> 
+      <section className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-12">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 md:gap-3"> 
           {[...Array(8)].map((_, i) => (
             <Image
               key={i}
@@ -63,14 +63,14 @@ export default function AboutPage() {
               alt="kuliner"
               width={500}
               height={400}
-              className="rounded-2xl object-cover aspect-[4/3]"
+              className={`rounded-2xl object-cover aspect-[4/3] ${i >= 4 ? 'hidden md:block' : ''}`}
             />
           ))}
         </div>
       </section>
 
       {/* MENGAPA GEOMAPS HADIR */}
-      <section className="relative max-w-full mx-auto px-6 py-20 overflow-hidden">
+      <section className="relative max-w-full mx-auto px-4 md:px-6 py-12 md:py-20 overflow-hidden">
           <Image
             src={leftsideAbout}
             alt="Left Side About"
@@ -163,49 +163,49 @@ export default function AboutPage() {
           {/* Mobile/Tablet Layout - Simple grid */}
           <div className="lg:hidden grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {/* Card 1 */}
-            <div className="flex justify-center">
+            <div className="flex justify-center px-4">
               <div className="relative w-full max-w-sm">
-                <div className="absolute -left-4 sm:-left-6 top-0 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10">
-                  1
-                </div>
-                <div className="bg-white rounded-2xl p-4 pt-6 text-base sm:text-lg text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                  <p>Memperkenalkan produk UMKM unggulan daerah</p>
+                <div className="bg-white rounded-2xl p-5 sm:p-6 text-sm sm:text-base md:text-lg text-center leading-relaxed shadow-[0_18px_40px_rgba(0,0,0,0.35)] pt-8 sm:pt-10">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10 shadow-lg">
+                    1
+                  </div>
+                  <p>Memperkenalkan produk Kuliner unggulan daerah</p>
                 </div>
               </div>
             </div>
 
             {/* Card 2 */}
-            <div className="flex justify-center">
+            <div className="flex justify-center px-4">
               <div className="relative w-full max-w-sm">
-                <div className="absolute -left-4 sm:-left-6 top-0 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10">
-                  2
-                </div>
-                <div className="bg-white rounded-2xl p-4 pt-6 text-base sm:text-lg text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                  <p>Membuka akses pasar lebih luas bagi UMKM.</p>
+                <div className="bg-white rounded-2xl p-5 sm:p-6 text-sm sm:text-base md:text-lg text-center leading-relaxed shadow-[0_18px_40px_rgba(0,0,0,0.35)] pt-8 sm:pt-10">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10 shadow-lg">
+                    2
+                  </div>
+                  <p>Membuka akses pasar lebih luas bagi Kuliner</p>
                 </div>
               </div>
             </div>
 
             {/* Card 3 */}
-            <div className="flex justify-center">
+            <div className="flex justify-center px-4">
               <div className="relative w-full max-w-sm">
-                <div className="absolute -left-4 sm:-left-6 top-0 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10">
-                  3
-                </div>
-                <div className="bg-white rounded-2xl p-4 pt-6 text-base sm:text-lg text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                  <p>Mendukung pertumbuhan ekonomi lokal.</p>
+                <div className="bg-white rounded-2xl p-5 sm:p-6 text-sm sm:text-base md:text-lg text-center leading-relaxed shadow-[0_18px_40px_rgba(0,0,0,0.35)] pt-8 sm:pt-10">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10 shadow-lg">
+                    3
+                  </div>
+                  <p>Mendukung pertumbuhan ekonomi lokal</p>
                 </div>
               </div>
             </div>
 
             {/* Card 4 */}
-            <div className="flex justify-center">
+            <div className="flex justify-center px-4">
               <div className="relative w-full max-w-sm">
-                <div className="absolute -left-4 sm:-left-6 top-0 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10">
-                  4
-                </div>
-                <div className="bg-white rounded-2xl p-4 pt-6 text-base sm:text-lg text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                  <p>Menjadikan UMKM sebagai ikon wisata dan budaya daerah.</p>
+                <div className="bg-white rounded-2xl p-5 sm:p-6 text-sm sm:text-base md:text-lg text-center leading-relaxed shadow-[0_18px_40px_rgba(0,0,0,0.35)] pt-8 sm:pt-10">
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10 shadow-lg">
+                    4
+                  </div>
+                  <p>Menjadikan Kuliner daerah sebagai ikon wisata dan budaya</p>
                 </div>
               </div>
             </div>
@@ -214,18 +214,18 @@ export default function AboutPage() {
       </section>
 
       {/* AJAKAN */}
-      <section className="flex flex-col justify-center items-center bg-white py-16 px-6 max-w-7xl mx-auto">
-        <h2 className="text-3xl font-semibold mb-5">
-          Bersama Membangun <span className="text-[var(--yellow-umkm)]">UMKM Lokal</span>
+      <section className="flex flex-col justify-center items-center bg-white py-8 md:py-16 px-4 md:px-6 max-w-7xl mx-auto">
+        <h2 className="text-xl md:text-3xl font-semibold mb-4 md:mb-5 text-center">
+          Bersama Memperkenalkan <span className="text-[var(--yellow-umkm)]">Kuliner Lokal</span>
         </h2>
-        <p className="text-black mb-10 text-4xl text-center">
-          “Mari dukung produk UMKM Pamekasan &amp; Sumenep dengan bangga menggunakan produk lokal.”
+        <p className="text-black mb-6 md:mb-10 text-lg md:text-3xl lg:text-4xl text-center px-4">
+          "Mari dukung produk Kuliner Pamekasan &amp; Sumenep dengan bangga."
         </p>
         <Link
           href="/umkm"
-          className="group flex items-center justify-center gap-5 bg-black text-white px-5 py-3 rounded-full hover:bg-white hover:outline-black hover:outline-2 transition-colors"
+          className="group flex items-center justify-center gap-3 md:gap-5 bg-black text-white px-4 md:px-5 py-2.5 md:py-3 rounded-full hover:bg-white hover:outline-black hover:outline-2 transition-colors"
         >
-          <p className="group-hover:text-black font-medium transition-colors">Jelajahi UMKM</p>
+          <p className="group-hover:text-black font-medium transition-colors text-sm md:text-base">Jelajahi Kuliner</p>
           <div className="bg-transparent p-1 rounded-full outline-1 outline-white group-hover:bg-black group-hover:outline-none transition-colors">
             <div className="bg-white p-1 rounded-full group-hover:bg-black transition-colors">
               <FaArrowRight className="w-3 h-auto text-black group-hover:text-white transition-colors" />

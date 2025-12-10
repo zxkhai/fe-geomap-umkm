@@ -81,7 +81,7 @@ export default function UmkmDetailPage() {
         {umkm.story && (
           <>
             <h2 className="font-semibold mb-2">Sejarah</h2>
-            <p className="text-gray-700 mb-4">{umkm.story}</p>
+            <p className="text-gray-700 mb-4 text-justify">{umkm.story}</p>
           </>
         )}
 
