@@ -28,7 +28,6 @@ export class MapUtils {
           background-color: white;
           border-radius: 50%;
           overflow: hidden;
-          border: 3px solid orange;
           box-shadow: 0 2px 6px rgba(0,0,0,0.2);
         ">
           <img src="${photo}" style="width:100%;height:100%;object-fit:cover;border-radius:50%" />
@@ -39,14 +38,11 @@ export class MapUtils {
             transform:translateX(-50%);
             width:0;
             height:0;
-            border-left:8px solid transparent;
-            border-right:8px solid transparent;
-            border-top:12px solid orange;
           "></div>
         </div>
       `,
-      className: '',
-      iconSize: [42, 42],
+      className: 'custom-marker-icon',
+      iconSize: [50, 50],
       iconAnchor: [21, 42],
       popupAnchor: [0, -40],
     });

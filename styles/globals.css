@@ -26,3 +26,12 @@ body {
   color: var(--foreground);
   font-family: var(--font-raleway);
 }
+
+.custom-marker-icon {
+  transform-origin: center center !important;
+}
+
+.leaflet-marker-icon.custom-marker-icon {
+  will-change: transform;
+  transition: none;
+}
