@@ -24,8 +24,8 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Beranda", href: "/" },
-    { name: "MAP", href: "/map" },
-    { name: "UMKM", href: "/umkm" },
+    { name: "Map", href: "/map" },
+    { name: "Kuliner", href: "/culinary" },
     { name: "Tentang", href: "/about" },
   ];
 

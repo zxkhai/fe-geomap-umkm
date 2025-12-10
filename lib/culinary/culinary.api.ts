@@ -1,21 +1,21 @@
 import { apiClient } from "../api";
-import { CreateUMKMData, MessageResponse, UMKMListResponse, UMKMResponse, UpdateUMKMData } from "./umkm.type";
+import { CreateCulinaryData, CulinaryListResponse, CulinaryResponse, UpdateCulinaryData } from "./culinary.type";
 
-export const umkmApi = {
-  // Get all UMKM
-  getAll: async (): Promise<UMKMListResponse> => {
-    const response = await apiClient.get<UMKMListResponse>('/umkm/');
+export const culinaryApi = {
+  // Get all Culinary
+  getAll: async (): Promise<CulinaryListResponse> => {
+    const response = await apiClient.get<CulinaryListResponse>('/umkm/');
     return response.data;
   },
 
-  // Get UMKM by ID
-  getById: async (id: number | string): Promise<UMKMResponse> => {
-    const response = await apiClient.get<UMKMResponse>(`/umkm/${id}`);
+  // Get Culinary by ID
+  getById: async (id: number | string): Promise<CulinaryResponse> => {
+    const response = await apiClient.get<CulinaryResponse>(`/umkm/${id}`);
     return response.data;
   },
 
-  // Create new UMKM
-  create: async (data: CreateUMKMData): Promise<UMKMResponse> => {
+  // Create new Culinary
+  create: async (data: CreateCulinaryData): Promise<CulinaryResponse> => {
     const hasFiles = data.place_pict instanceof File || data.product_pict instanceof File;
     
     if (hasFiles) {
@@ -31,20 +31,20 @@ export const umkmApi = {
         }
       });
       
-      const response = await apiClient.post<UMKMResponse>('/umkm/', formData, {
+      const response = await apiClient.post<CulinaryResponse>('/umkm/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       return response.data;
     } else {
-      const response = await apiClient.post<UMKMResponse>('/umkm/', data);
+      const response = await apiClient.post<CulinaryResponse>('/umkm/', data);
       return response.data;
     }
   },
 
-  // Update UMKM
-  update: async (id: number | string, data: UpdateUMKMData): Promise<UMKMResponse> => {
+  // Update Culinary
+  update: async (id: number | string, data: UpdateCulinaryData): Promise<CulinaryResponse> => {
     const hasFiles = data.place_pict instanceof File || data.product_pict instanceof File;
     
     if (hasFiles) {
@@ -60,21 +60,21 @@ export const umkmApi = {
         }
       });
       
-      const response = await apiClient.put<UMKMResponse>(`/umkm/${id}`, formData, {
+      const response = await apiClient.put<CulinaryResponse>(`/umkm/${id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
       return response.data;
     } else {
-      const response = await apiClient.put<UMKMResponse>(`/umkm/${id}`, data);
+      const response = await apiClient.put<CulinaryResponse>(`/umkm/${id}`, data);
       return response.data;
     }
   },
 
-  // Delete UMKM
-  delete: async (id: number | string): Promise<MessageResponse> => {
-    const response = await apiClient.delete<MessageResponse>(`/umkm/${id}`);
+  // Delete Culinary
+  delete: async (id: number | string): Promise<CulinaryResponse> => {
+    const response = await apiClient.delete<CulinaryResponse>(`/umkm/${id}`);
     return response.data;
   },
 };

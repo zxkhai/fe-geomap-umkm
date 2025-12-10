@@ -5,7 +5,7 @@ import { FaArrowRight, FaMapMarkerAlt, FaPhoneAlt, FaTimes } from "react-icons/f
 interface PopSlideDetailProps {
   isOpen: boolean;
   onClose: () => void;
-  umkm: {
+  culinary: {
     name: string;
     location: string;
     story: string;
@@ -16,8 +16,8 @@ interface PopSlideDetailProps {
   } | null;
 }
 
-export default function PopSlideDetail({ isOpen, onClose, umkm }: PopSlideDetailProps) {
-  if (!umkm) return null;
+export default function PopSlideDetail({ isOpen, onClose, culinary }: PopSlideDetailProps) {
+  if (!culinary) return null;
 
   return (
     <>
@@ -50,8 +50,8 @@ export default function PopSlideDetail({ isOpen, onClose, umkm }: PopSlideDetail
           {/* Image */}
           <div className="w-full h-48 relative rounded-xl overflow-hidden">
             <Image
-              src={umkm.image}
-              alt={umkm.name}
+              src={culinary.image}
+              alt={culinary.name}
               fill
               className="object-cover"
             />
@@ -59,10 +59,10 @@ export default function PopSlideDetail({ isOpen, onClose, umkm }: PopSlideDetail
 
           {/* Name and Location */}
           <div>
-            <h3 className="text-xl font-bold mb-1">{umkm.name}</h3>
+            <h3 className="text-xl font-bold mb-1">{culinary.name}</h3>
             <p className="text-[var(--yellow-umkm)] text-sm flex items-center gap-1">
               <FaMapMarkerAlt className="w-3 h-3" />
-              {umkm.location}
+              {culinary.location}
             </p>
           </div>
 
@@ -71,13 +71,13 @@ export default function PopSlideDetail({ isOpen, onClose, umkm }: PopSlideDetail
             <h4 className="font-bold mb-2">Sejarah</h4>
             <p className="text-sm text-gray-700 leading-relaxed text-justify">
               {(() => {
-                const words = umkm.story.trim().split(/\s+/).filter(Boolean);
-                const truncated = words.length > 50 ? words.slice(0, 50).join(' ') + '...' : umkm.story;
+                const words = culinary.story.trim().split(/\s+/).filter(Boolean);
+                const truncated = words.length > 50 ? words.slice(0, 50).join(' ') + '...' : culinary.story;
                 return truncated;
               })()}
             </p>
-            {umkm.slug && umkm.story.trim().split(/\s+/).filter(Boolean).length > 50 && (
-              <Link href={`/umkm/${umkm.slug}`} className="text-sm text-[var(--yellow-umkm)] hover:underline mt-1 inline-block">
+            {culinary.slug && culinary.story.trim().split(/\s+/).filter(Boolean).length > 50 && (
+              <Link href={`/culinary/${culinary.slug}`} className="text-sm text-[var(--yellow-umkm)] hover:underline mt-1 inline-block">
                 Baca selengkapnya
               </Link>
             )}
@@ -88,7 +88,7 @@ export default function PopSlideDetail({ isOpen, onClose, umkm }: PopSlideDetail
             <h4 className="font-bold mb-2">Alamat</h4>
             <p className="text-sm text-gray-700 flex items-start gap-2">
               <FaMapMarkerAlt className="w-4 h-4 mt-1 flex-shrink-0 text-red-500" />
-              <span>{umkm.address}</span>
+              <span>{culinary.address}</span>
             </p>
           </div>
 
@@ -97,8 +97,8 @@ export default function PopSlideDetail({ isOpen, onClose, umkm }: PopSlideDetail
             <h4 className="font-bold mb-2">Kontak</h4>
             <p className="text-sm text-gray-700 flex items-center gap-2">
               <FaPhoneAlt className="w-4 h-4 text-green-600" />
-              <a href={`tel:${umkm.phone}`} className="hover:underline">
-                {umkm.phone}
+              <a href={`tel:${culinary.phone}`} className="hover:underline">
+                {culinary.phone}
               </a>
             </p>
           </div>

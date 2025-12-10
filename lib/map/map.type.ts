@@ -1,4 +1,4 @@
-export interface MapUMKM {
+export interface MapCulinary {
   id: number;
   name: string;
   lat: number;
@@ -50,7 +50,7 @@ export interface OSRMRouteResponse {
 
 export interface MapProps {
   filter?: string;
-  onMarkerClick?: (umkm: any) => void;
-  umkmData?: any[];
+  onMarkerClick?: (culinary: any) => void;
+  culinaryData?: any[];
   searchQuery?: string;
 }

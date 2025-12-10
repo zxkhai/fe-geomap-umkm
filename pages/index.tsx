@@ -1,16 +1,16 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-import { UMKM } from "@/lib/umkm/umkm.type";
+import { Culinary } from "@/lib/culinary/culinary.type";
 import { FaArrowRight } from "react-icons/fa";
-import { umkmService } from "@/lib/umkm/umkm.service";
-import FoodCardUMKM from "@/components/cards/CardUMKM";
+import { culinaryService } from "@/lib/culinary/culinary.service";
+import FoodCardUMKM from "@/components/cards/CardCulinaries";
 import {heroHome, foodOneImage, foodTrenImage, newsImage} from "@/assets";
 
 export default function LandingPage() {
-  const [umkmData, setUmkmData] = useState<UMKM[]>([]);
+  const [umkmData, setUmkmData] = useState<Culinary[]>([]);
   const [loading, setLoading] = useState(true);
-  const [trendingUMKM, setTrendingUMKM] = useState<UMKM | null>(null);
+  const [trendingUMKM, setTrendingUMKM] = useState<Culinary | null>(null);
 
   useEffect(() => {
     fetchUMKMData();
@@ -19,7 +19,7 @@ export default function LandingPage() {
   const fetchUMKMData = async () => {
     try {
       setLoading(true);
-      const result = await umkmService.getAll();
+      const result = await culinaryService.getAll();
       if (result.success && result.data) {
         setUmkmData(result.data);
         // Set a random UMKM as trending
@@ -58,7 +58,7 @@ export default function LandingPage() {
               href="/map"
               className="group flex items-center gap-3 bg-black text-white px-6 py-3 rounded-full hover:bg-[var(--yellow-umkm)] transition-colors w-full sm:w-auto justify-center"
             >
-              <p className="group-hover:text-black font-medium transition-colors text-sm md:text-base">Jelajahi MAP</p>
+              <p className="group-hover:text-black font-medium transition-colors text-sm md:text-base">Jelajahi Map</p>
               <div className="bg-transparent p-1 rounded-full outline-1 outline-white group-hover:bg-black group-hover:outline-none transition-colors">
                 <div className="bg-white p-1 rounded-full group-hover:bg-black transition-colors">
                   <FaArrowRight className="w-3 h-auto text-black group-hover:text-[var(--yellow-umkm)] transition-colors" />
@@ -144,7 +144,7 @@ export default function LandingPage() {
                 </div>
               ))
             ) : (
-              <p className="text-gray-500">Belum ada data UMKM</p>
+              <p className="text-gray-500">Belum ada data Culinary</p>
             )}
           </div>
         )}
@@ -170,7 +170,7 @@ export default function LandingPage() {
             </h2>
             <h3 className="text-base md:text-3xl font-bold my-3">{trendingUMKM.name}</h3>
             {(() => {
-              const longText = trendingUMKM.story || `${trendingUMKM.name} adalah salah satu UMKM kuliner terbaik di ${trendingUMKM.regency}. Dengan cita rasa yang khas dan pelayanan yang ramah, UMKM ini menjadi favorit banyak pelanggan. Dikelola oleh ${trendingUMKM.owner}, UMKM ini terus berkembang dan memberikan kontribusi positif bagi ekonomi lokal.`;
+              const longText = trendingUMKM.story || `${trendingUMKM.name} adalah salah satu Culinary terbaik di ${trendingUMKM.regency}. Dengan cita rasa yang khas dan pelayanan yang ramah, tempat ini menjadi favorit banyak pelanggan. Dikelola oleh ${trendingUMKM.owner}, tempat ini terus berkembang dan memberikan kontribusi positif bagi ekonomi lokal.`;
 
               const words = longText.trim().split(/\s+/).filter(Boolean);
               const display = words.length > 50 ? words.slice(0, 50).join(' ') + ' ...selanjutnya' : longText;
@@ -190,7 +190,7 @@ export default function LandingPage() {
                 </div>
               </Link>
               <Link
-                href={`/umkm/${trendingUMKM.slug}`}
+                href={`/culinary/${trendingUMKM.slug}`}
                 className="group w-full sm:w-1/2 flex items-center justify-between gap-3 bg-white text-white px-4 md:px-6 py-3 rounded-full outline-2 outline-black hover:bg-black transition-colors"
               >
                 <p className="text-black group-hover:text-white font-medium transition-colors text-sm md:text-base whitespace-nowrap">Lihat Detail</p>
@@ -208,7 +208,7 @@ export default function LandingPage() {
       {/* BERITA UMKM */}
       <section className="max-w-7xl mx-auto px-6 py-10">
         <h2 className="text-xl md:text-4xl font-bold mb-6">
-          Berita <span className="text-[var(--yellow-umkm)]">UMKM</span> Terkini
+          Berita <span className="text-[var(--yellow-umkm)]">Kuliner</span> Terkini
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {[newsImage, newsImage, newsImage].map((img, i) => (
@@ -228,7 +228,7 @@ export default function LandingPage() {
                   15 September 2025 – Sampang
                 </p>
                 <h3 className="font-semibold mb-2 text-sm md:text-base">
-                  Bazar UMKM Kuliner Sampang 2025 Resmi Dibuka
+                  Bazar Kuliner Sampang 2025 Resmi Dibuka
                 </h3>
                 <button className="text-[var(--yellow-umkm)] hover:underline text-xs md:text-sm">
                   Baca Selengkapnya →

@@ -18,7 +18,7 @@ export default function AboutPage() {
         <div className="max-w-7xl px-4 md:px-12 flex-col text-white">
           <p className="font-bold text-3xl md:text-5xl my-2">Tentang</p>
           <p className="text-[var(--yellow-umkm)] font-semibold text-3xl md:text-5xl my-2">Geo Kuliner</p>
-          <p className="max-w-xl text-sm md:text-xl my-4 md:my-8">Platform digital resmi dari Dinas Pariwisata Kabupaten Pamekasan & Sampang yang hadir untuk mendukung perkembangan UMKM lokal agar semakin maju, dikenal luas, dan berdaya saing di era digital.</p>
+          <p className="max-w-xl text-sm md:text-xl my-4 md:my-8">Platform digital resmi dari Dinas Pariwisata Kabupaten Pamekasan & Sampang yang hadir untuk mendukung perkembangan Kuliner lokal agar semakin maju, dikenal luas, dan berdaya saing di era digital.</p>
         </div>
       </section>
 
@@ -31,16 +31,16 @@ export default function AboutPage() {
         <div className="bg-gray-200 rounded-2xl p-4 md:p-6 text-center mb-6 md:mb-8 text-sm md:text-lg">
           <h3 className="font-semibold mb-2">Visi</h3>
           <p>
-            Mewujudkan UMKM lokal yang berdaya saing, inovatif, dan berkelanjutan melalui teknologi digital.
+            Mewujudkan Kuliner lokal yang berdaya saing, inovatif, dan berkelanjutan melalui teknologi digital.
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            "Memberikan ruang promosi bagi UMKM daerah.",
+            "Memberikan ruang promosi bagi Kuliner lokal.",
             "Menyediakan informasi yang akurat & mudah diakses.",
-            "Mendorong digitalisasi dan modernisasi UMKM.",
-            "Menjadi penghubung UMKM, pemerintah, dan masyarakat.",
+            "Mendorong digitalisasi dan modernisasi Kuliner lokal.",
+            "Menjadi penghubung Kuliner lokal, pemerintah, dan masyarakat.",
           ].map((text, i) => (
             <div
               key={i}
@@ -89,7 +89,7 @@ export default function AboutPage() {
           <div className="lg:hidden flex items-center justify-center mb-8">
             <h2 className="text-center text-3xl sm:text-4xl font-bold leading-tight">
               <span className="block">"Mengapa</span>
-              <span className="block text-[var(--yellow-umkm)]">Geomaps UMKM</span>
+              <span className="block text-[var(--yellow-umkm)]">Geo Kuliner</span>
               <span className="block">Hadir?"</span>
             </h2>
           </div>
@@ -105,7 +105,7 @@ export default function AboutPage() {
                     1
                   </div>
                   <div className="bg-white w-56 rounded-2xl p-6 text-xl text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                    <p>Memperkenalkan produk UMKM unggulan daerah.</p>
+                    <p>Memperkenalkan produk Kuliner unggulan daerah.</p>
                   </div>
                 </div>
               </div>
@@ -117,7 +117,7 @@ export default function AboutPage() {
                     4
                   </div>
                   <div className="bg-white rounded-2xl w-60 p-6 text-xl text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                    <p>Menjadikan UMKM sebagai ikon wisata dan budaya daerah.</p>
+                    <p>Menjadikan Kuliner sebagai ikon wisata dan budaya daerah.</p>
                   </div>
                 </div>
               </div>
@@ -127,7 +127,7 @@ export default function AboutPage() {
             <div className="flex justify-center py-4">
               <h2 className="text-center text-4xl xl:text-5xl font-bold leading-tight">
                 <span className="block">"Mengapa</span>
-                <span className="block text-[var(--yellow-umkm)]">Geomaps UMKM</span>
+                <span className="block text-[var(--yellow-umkm)]">Geo Kuliner</span>
                 <span className="block">Hadir?"</span>
               </h2>
             </div>
@@ -141,7 +141,7 @@ export default function AboutPage() {
                     2
                   </div>
                   <div className="bg-white rounded-2xl w-64 p-6 text-xl text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                    <p>Membuka akses pasar lebih luas bagi UMKM.</p>
+                    <p>Membuka akses pasar lebih luas bagi Kuliner lokal.</p>
                   </div>
                 </div>
               </div>
@@ -222,7 +222,7 @@ export default function AboutPage() {
           "Mari dukung produk Kuliner Pamekasan &amp; Sumenep dengan bangga."
         </p>
         <Link
-          href="/umkm"
+          href="/culinary"
           className="group flex items-center justify-center gap-3 md:gap-5 bg-black text-white px-4 md:px-5 py-2.5 md:py-3 rounded-full hover:bg-white hover:outline-black hover:outline-2 transition-colors"
         >
           <p className="group-hover:text-black font-medium transition-colors text-sm md:text-base">Jelajahi Kuliner</p>

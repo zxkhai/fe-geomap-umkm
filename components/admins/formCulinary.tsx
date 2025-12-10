@@ -1,16 +1,16 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { SocialMedia } from "@/lib/umkm/umkm.type";
-import { umkmService } from "@/lib/umkm/umkm.service";
+import { SocialMedia } from "@/lib/culinary/culinary.type";
+import { culinaryService } from "@/lib/culinary/culinary.service";
 import { FaChevronDown, FaChevronUp, FaPlus, FaTrash } from "react-icons/fa";
 
-interface FormUMKMProps {
+interface FormKulinerProps {
   umkmId?: string | number;
   mode?: "add" | "edit";
 }
 
-export default function FormUMKM({ umkmId, mode = "add" }: FormUMKMProps) {
+export default function FormKuliner({ umkmId, mode = "add" }: FormKulinerProps) {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<string[]>(["informasi-utama"]);
   const [socialMedias, setSocialMedias] = useState<SocialMedia[]>([
@@ -39,12 +39,11 @@ export default function FormUMKM({ umkmId, mode = "add" }: FormUMKMProps) {
   const [existingPlacePict, setExistingPlacePict] = useState<string>("");
   const [existingProductPict, setExistingProductPict] = useState<string>("");
 
-  // Fetch UMKM data if in edit mode
   useEffect(() => {
     if (mode === "edit" && umkmId) {
-      const fetchUmkmData = async () => {
+      const fetchCulinaryData = async () => {
         try {
-          const result = await umkmService.getById(umkmId);
+          const result = await culinaryService.getById(umkmId);
           if (result.success && result.data) {
             const umkm = result.data;
             setFormData({
@@ -86,7 +85,7 @@ export default function FormUMKM({ umkmId, mode = "add" }: FormUMKMProps) {
           setIsFetching(false);
         }
       };
-      fetchUmkmData();
+      fetchCulinaryData();
     }
   }, [mode, umkmId]);
 
@@ -171,7 +170,7 @@ export default function FormUMKM({ umkmId, mode = "add" }: FormUMKMProps) {
       console.log("Submit Data:", submitData);
 
       // Validate data
-      const validation = umkmService.validateUMKMData(submitData);
+      const validation = culinaryService.validateCulinaryData(submitData);
       if (!validation.valid) {
         setError(validation.errors.join(", "));
         setIsLoading(false);
@@ -181,10 +180,10 @@ export default function FormUMKM({ umkmId, mode = "add" }: FormUMKMProps) {
       let result;
       if (mode === "edit" && umkmId) {
         // Update existing UMKM
-        result = await umkmService.update(umkmId, submitData);
+        result = await culinaryService.update(umkmId, submitData);
       } else {
         // Create new UMKM
-        result = await umkmService.create(submitData);
+        result = await culinaryService.create(submitData);
       }
 
       if (result.success) {

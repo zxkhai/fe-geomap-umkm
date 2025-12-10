@@ -11,7 +11,7 @@ import { MapContainer, TileLayer, GeoJSON, Marker } from 'react-leaflet';
 export default function RBImap({ 
   filter = 'Semua',
   onMarkerClick,
-  umkmData = [],
+  culinaryData = [],
   searchQuery = ''
 }: MapProps) {
   const [pamekasanLayers, setPamekasanLayers] = useState<GeoLayer[]>([]);
@@ -19,12 +19,11 @@ export default function RBImap({
   const [allRoutes, setAllRoutes] = useState<RouteData[]>([]);
   const [isLoadingRoutes, setIsLoadingRoutes] = useState(false);
   
-  const mapUMKMData = MapUtils.transformUMKMData(umkmData);
+  const mapCulinaryData = MapUtils.transformCulinaryData(culinaryData);
   
   const visibleRoutes = routeService.filterRoutes(allRoutes, filter);
   
-  const filteredMarkers = MapUtils.filterUMKM(mapUMKMData, filter, searchQuery);
-
+  const filteredMarkers = MapUtils.filterCulinary(mapCulinaryData, filter, searchQuery);
   const loadGeoLayers = async () => {
     const pamekasan = await geoLayerService.loadKabupatenData('pamekasan', '#22c55e');
     const sumenep = await geoLayerService.loadKabupatenData('sumenep', '#2fdb04');
@@ -34,7 +33,7 @@ export default function RBImap({
   };
 
   const generateRoutes = async () => {
-    if (mapUMKMData.length < 2) {
+    if (mapCulinaryData.length < 2) {
       setAllRoutes([]);
       return;
     }
@@ -42,7 +41,7 @@ export default function RBImap({
     setIsLoadingRoutes(true);
     
     try {
-      const routes = await routeService.generateRoutes(mapUMKMData);
+      const routes = await routeService.generateRoutes(mapCulinaryData);
       setAllRoutes(routes);
     } catch (error) {
       console.error('Error generating routes:', error);
@@ -56,13 +55,13 @@ export default function RBImap({
   }, []);
 
   useEffect(() => {
-    if (mapUMKMData.length >= 2) {
-      console.log('🔄 Generating routes for all UMKMs...');
+    if (mapCulinaryData.length >= 2) {
+      console.log('🔄 Generating routes for all Culinary...');
       generateRoutes();
     } else {
       setAllRoutes([]);
     }
-  }, [mapUMKMData.length]);
+  }, [mapCulinaryData.length]);
 
   return (
     <MapContainer
@@ -90,18 +89,18 @@ export default function RBImap({
         <GeoJSON key={`route-${i}-${filter}`} data={route.data} style={route.style} />
       ))}
 
-      {filteredMarkers.map((mapUmkm) => {
-        const originalUmkm = umkmData.find(u => u.id === mapUmkm.id);
+      {filteredMarkers.map((mapCulinary) => {
+        const originalCulinary = culinaryData.find(u => u.id === mapCulinary.id);
         
         return (
           <Marker 
-            key={mapUmkm.id} 
-            position={[mapUmkm.lat, mapUmkm.lng]} 
-            icon={MapUtils.createMarkerIcon(mapUmkm.photo)}
+            key={mapCulinary.id} 
+            position={[mapCulinary.lat, mapCulinary.lng]} 
+            icon={MapUtils.createMarkerIcon(mapCulinary.photo)}
             eventHandlers={{
               click: () => {
-                if (onMarkerClick && originalUmkm) {
-                  onMarkerClick(originalUmkm);
+                if (onMarkerClick && originalCulinary) {
+                  onMarkerClick(originalCulinary);
                 }
               },
             }}

@@ -1,4 +1,4 @@
-import FormUMKM from "@/components/admins/formUMKM";
+import FormUMKM from "@/components/admins/formCulinary";
 import Protected from "@/components/auth/Protected";
 
 export default function AddUmkmPage() {

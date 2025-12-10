@@ -59,8 +59,8 @@ export default function Footer() {
           <h3 className="font-bold mb-2">Tautan Cepat</h3>
           <ul className="space-y-2 text-sm mt-4">
             <li><Link className="hover:text-[var(--yellow-umkm)] transition-colors" href="/">Beranda</Link></li>
-            <li><Link className="hover:text-[var(--yellow-umkm)] transition-colors" href="/map">MAP</Link></li>
-            <li><Link className="hover:text-[var(--yellow-umkm)] transition-colors" href="/umkm">UMKM</Link></li>
+            <li><Link className="hover:text-[var(--yellow-umkm)] transition-colors" href="/map">Map</Link></li>
+            <li><Link className="hover:text-[var(--yellow-umkm)] transition-colors" href="/culinary">Kuliner</Link></li>
             <li><Link className="hover:text-[var(--yellow-umkm)] transition-colors" href="/about">Tentang</Link></li>
           </ul>
         </div>

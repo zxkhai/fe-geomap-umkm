@@ -1,16 +1,16 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
-import { UMKM } from "@/lib/umkm/umkm.type";
+import { Culinary } from "@/lib/culinary/culinary.type";
 import { IoLocation } from "react-icons/io5";
 import { BsTelephone } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
-import { umkmService } from "@/lib/umkm/umkm.service";
+import { culinaryService } from "@/lib/culinary/culinary.service";
 
 export default function UmkmDetailPage() {
   const router = useRouter();
   const { slug } = router.query; // Slug from URL
-  const [umkm, setUmkm] = useState<UMKM | null>(null);
+  const [umkm, setUmkm] = useState<Culinary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -22,17 +22,17 @@ export default function UmkmDetailPage() {
         setLoading(true);
         setError(null);
         
-        // Fetch UMKM by slug
-        const result = await umkmService.getBySlug(slug);
+        // Fetch Culinary by slug
+        const result = await culinaryService.getBySlug(slug);
         
         if (result.success && result.data) {
           setUmkm(result.data);
         } else {
-          setError(result.error || "UMKM tidak ditemukan");
+          setError(result.error || "Culinary tidak ditemukan");
         }
       } catch (err) {
-        console.error("Error fetching UMKM detail:", err);
-        setError("Gagal memuat data UMKM");
+        console.error("Error fetching Culinary detail:", err);
+        setError("Gagal memuat data Culinary");
       } finally {
         setLoading(false);
       }
@@ -52,7 +52,7 @@ export default function UmkmDetailPage() {
   if (error || !umkm) {
     return (
       <div className="text-center py-20 text-gray-500">
-        {error || "UMKM tidak ditemukan."}
+        {error || "Culinary tidak ditemukan."}
       </div>
     );
   }
@@ -74,7 +74,7 @@ export default function UmkmDetailPage() {
         <div className="flex text-[var(--yellow-umkm)] items-center gap-2 text-sm mb-6">
           <IoLocation />
           <p>
-            {umkm.regency} / {umkm.classification || umkm.type || "UMKM"}
+            {umkm.regency} / {umkm.classification || umkm.type || "Culinary"}
           </p>
         </div>
 

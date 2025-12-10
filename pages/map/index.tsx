@@ -1,17 +1,17 @@
 import dynamic from "next/dynamic";
 import { CiSearch } from "react-icons/ci";
 import { useState, useEffect } from "react";
-import { UMKM } from "@/lib/umkm/umkm.type";
-import { umkmService } from "@/lib/umkm/umkm.service";
+import { Culinary } from "@/lib/culinary/culinary.type";
+import { culinaryService } from "@/lib/culinary/culinary.service";
 import PopSlideDetail from "@/components/maps/PopSlideDetail";
 
 const MapRBI = dynamic(() => import('@/components/maps/MapRBI'), { ssr: false });
 
 export default function MapPage() {
   const [activeFilter, setActiveFilter] = useState<string>("Semua");
-  const [selectedUMKM, setSelectedUMKM] = useState<UMKM | null>(null);
+  const [selectedUMKM, setSelectedUMKM] = useState<Culinary | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [umkmData, setUmkmData] = useState<UMKM[]>([]);
+  const [umkmData, setUmkmData] = useState<Culinary[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -22,18 +22,18 @@ export default function MapPage() {
   const fetchUMKMData = async () => {
     try {
       setLoading(true);
-      const result = await umkmService.getAll();
+      const result = await culinaryService.getAll();
       if (result.success && result.data) {
         setUmkmData(result.data);
       }
     } catch (error) {
-      console.error("Error fetching UMKM data:", error);
+      console.error("Error fetching Culinary data:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleMarkerClick = (umkm: UMKM) => {
+  const handleMarkerClick = (umkm: Culinary) => {
     setSelectedUMKM(umkm);
     setIsDetailOpen(true);
   };
@@ -103,7 +103,7 @@ export default function MapPage() {
       <MapRBI 
         filter={activeFilter} 
         onMarkerClick={handleMarkerClick}
-        umkmData={umkmData}
+        culinaryData={umkmData}
         searchQuery={searchQuery}
       />
 
@@ -111,7 +111,7 @@ export default function MapPage() {
       <PopSlideDetail
         isOpen={isDetailOpen}
         onClose={handleCloseDetail}
-        umkm={
+        culinary={
           selectedUMKM
             ? {
                 name: selectedUMKM.name || '',
@@ -119,7 +119,7 @@ export default function MapPage() {
                 story: selectedUMKM.story || '',
                 address: selectedUMKM.address || '',
                 phone: selectedUMKM.phone || '',
-                image: selectedUMKM.product_pict || '/umkm/default.jpg',
+                image: selectedUMKM.product_pict || '/culinary/default.jpg',
                 slug: selectedUMKM.slug || '',
               }
             : null

@@ -9,7 +9,7 @@ export interface SocialMedia {
   deletedAt?: string | null;
 }
 
-export interface UMKM {
+export interface Culinary {
   id: number;
   name: string;
   owner: string;
@@ -34,7 +34,7 @@ export interface UMKM {
   updatedAt?: string;
 }
 
-export interface CreateUMKMData {
+export interface CreateCulinaryData {
   name: string;
   owner: string;
   phone: string;
@@ -50,19 +50,19 @@ export interface CreateUMKMData {
   payment?: string;
   place_pict?: File | string;
   product_pict?: File | string;
-  medsos?: string; // JSON string array of social media
+  medsos?: string;
 }
 
-export interface UpdateUMKMData extends Partial<CreateUMKMData> {}
+export interface UpdateCulinaryData extends Partial<CreateCulinaryData> {}
 
-export interface UMKMListResponse {
+export interface CulinaryListResponse {
   message: string;
-  data: UMKM[];
+  data: Culinary[];
 }
 
-export interface UMKMResponse {
+export interface CulinaryResponse {
   message: string;
-  data: UMKM;
+  data: Culinary;
 }
 
 export interface MessageResponse {

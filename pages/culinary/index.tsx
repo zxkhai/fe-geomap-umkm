@@ -1,13 +1,13 @@
 import { foodOneImage } from "@/assets";
 import { CiSearch } from "react-icons/ci";
 import { useState, useEffect } from "react";
-import { UMKM } from "@/lib/umkm/umkm.type";
-import FoodCardUMKM from "@/components/cards/CardUMKM";
-import { umkmService } from "@/lib/umkm/umkm.service";
+import { Culinary } from "@/lib/culinary/culinary.type";
+import FoodCardUMKM from "@/components/cards/CardCulinaries";
+import { culinaryService } from "@/lib/culinary/culinary.service";
 
 export default function UMKMPage() {
   const [activeFilter, setActiveFilter] = useState<string>("Semua");
-  const [umkmData, setUmkmData] = useState<UMKM[]>([]);
+  const [umkmData, setUmkmData] = useState<Culinary[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,7 +30,7 @@ export default function UMKMPage() {
   const fetchUMKMData = async () => {
     try {
       setLoading(true);
-      const result = await umkmService.getAll();
+      const result = await culinaryService.getAll();
       if (result.success && result.data) {
         setUmkmData(result.data);
       }
@@ -88,7 +88,7 @@ export default function UMKMPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-16 bg-white">
       <h2 className="text-2xl md:text-4xl font-bold text-center mb-6 md:mb-8">
-        Ragam Kuliner UMKM{" "}
+        Ragam Kuliner{" "}
         <span className="text-[var(--yellow-umkm)]">Pamekasan & Sumenep</span>
       </h2>
 

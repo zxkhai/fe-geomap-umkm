@@ -1,4 +1,4 @@
-import { MapUMKM, RouteData, OSRMRouteResponse } from '@/lib/map/map.type';
+import { RouteData, OSRMRouteResponse, MapCulinary } from '@/lib/map/map.type';
 
 export class RouteService {
   private static readonly OSRM_BASE_URL = 'https://router.project-osrm.org/route/v1/driving';
@@ -21,7 +21,7 @@ export class RouteService {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
 
-  private async fetchOSRMRoute(start: MapUMKM, end: MapUMKM): Promise<OSRMRouteResponse | null> {
+  private async fetchOSRMRoute(start: MapCulinary, end: MapCulinary): Promise<OSRMRouteResponse | null> {
     try {
       const url = `${RouteService.OSRM_BASE_URL}/${start.lng},${start.lat};${end.lng},${end.lat}?overview=full&geometries=geojson`;
       
@@ -42,20 +42,20 @@ export class RouteService {
     }
   }
 
-  private generateCacheKey(umkmList: MapUMKM[]): string {
-    return umkmList.map(u => u.id).sort().join('-');
+  private generateCacheKey(culinaryList: MapCulinary[]): string {
+    return culinaryList.map(u => u.id).sort().join('-');
   }
 
   async generateRoutes(
-    umkmList: MapUMKM[],
+    culinaryList: MapCulinary[],
     onProgress?: (current: number, total: number) => void
   ): Promise<RouteData[]> {
-    if (umkmList.length < 2) {
+    if (culinaryList.length < 2) {
       return [];
     }
 
     // Check cache
-    const cacheKey = this.generateCacheKey(umkmList);
+    const cacheKey = this.generateCacheKey(culinaryList);
     if (this.cache.has(cacheKey)) {
       // console.log('✅ Using cached routes');
       return this.cache.get(cacheKey)!;
@@ -63,14 +63,14 @@ export class RouteService {
     
     const routes: RouteData[] = [];
     const connected = new Set<number>();
-    const unconnected = new Set<number>(umkmList.map((_, idx) => idx));
+    const unconnected = new Set<number>(culinaryList.map((_, idx) => idx));
     
     const startIdx = 0;
     connected.add(startIdx);
     unconnected.delete(startIdx);
 
     let progressCount = 0;
-    const totalConnections = umkmList.length - 1;
+    const totalConnections = culinaryList.length - 1;
 
     while (unconnected.size > 0) {
       let minDistance = Infinity;
@@ -79,10 +79,10 @@ export class RouteService {
       for (const connectedIdx of connected) {
         for (const unconnectedIdx of unconnected) {
           const distance = this.calculateDistance(
-            umkmList[connectedIdx].lat,
-            umkmList[connectedIdx].lng,
-            umkmList[unconnectedIdx].lat,
-            umkmList[unconnectedIdx].lng
+            culinaryList[connectedIdx].lat,
+            culinaryList[connectedIdx].lng,
+            culinaryList[unconnectedIdx].lat,
+            culinaryList[unconnectedIdx].lng
           );
 
           if (distance < minDistance) {
@@ -94,27 +94,27 @@ export class RouteService {
 
       if (!bestPair) break;
 
-      const umkm1 = umkmList[bestPair.fromIdx];
-      const umkm2 = umkmList[bestPair.toIdx];
+      const culinary1 = culinaryList[bestPair.fromIdx];
+      const culinary2 = culinaryList[bestPair.toIdx];
 
       await this.delay(RouteService.DELAY_MS);
 
-      const route = await this.fetchOSRMRoute(umkm1, umkm2);
+      const route = await this.fetchOSRMRoute(culinary1, culinary2);
       
       if (route) {
-        // console.log(`✅ Route: ${umkm1.name} (${umkm1.regency}) → ${umkm2.name} (${umkm2.regency})`);
+        // console.log(`✅ Route: ${culinary1.name} (${culinary1.regency}) → ${culinary2.name} (${culinary2.regency})`);
         routes.push({
-          name: `route-${umkm1.id}-${umkm2.id}`,
+          name: `route-${culinary1.id}-${culinary2.id}`,
           data: {
             type: 'FeatureCollection',
             features: [{
               type: 'Feature',
               geometry: route.geometry,
               properties: {
-                from: umkm1.name,
-                to: umkm2.name,
-                fromRegency: umkm1.regency,
-                toRegency: umkm2.regency,
+                from: culinary1.name,
+                to: culinary2.name,
+                fromRegency: culinary1.regency,
+                toRegency: culinary2.regency,
               }
             }]
           },

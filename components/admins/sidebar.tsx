@@ -33,7 +33,7 @@ export default function Sidebar() {
     <aside className="hidden md:block w-52 bg-gray-100 sticky top-20 h-[calc(100vh-5rem)] overflow-auto">
       <nav className="px-3 space-y-2 mt-4">
         <NavItem href="/admin/dashboard" label="Dashboard" icon={<MdOutlineDashboard />}/>
-        <NavItem href="/admin/umkm" label="Data UMKM" icon={<FiShoppingBag />}/>
+        <NavItem href="/admin/culinary" label="Data Kuliner" icon={<FiShoppingBag />}/>
         <NavItem href="/admin/profile" label="Profile" icon={<GoPerson />}/>
       </nav>
 

@@ -2,13 +2,13 @@ import Link from "next/link";
 import { FaPlus } from "react-icons/fa6";
 import { FaRegEdit } from "react-icons/fa";
 import { useState, useEffect } from "react";
-import type { UMKM } from "@/lib/umkm/umkm.type";
+import type { Culinary } from "@/lib/culinary/culinary.type";
 import { MdDeleteOutline } from "react-icons/md";
 import Protected from "@/components/auth/Protected";
-import { umkmService } from "@/lib/umkm/umkm.service";
+import { culinaryService } from "@/lib/culinary/culinary.service";
 
 export default function DataUmkmPage() {
-  const [umkmList, setUmkmList] = useState<UMKM[]>([]);
+  const [umkmList, setUmkmList] = useState<Culinary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -19,15 +19,15 @@ export default function DataUmkmPage() {
   useEffect(() => {
     const fetchUmkmData = async () => {
       try {
-        const result = await umkmService.getAll();
+        const result = await culinaryService.getAll();
         if (result.success && result.data) {
           setUmkmList(result.data);
         } else {
-          setError(result.error || "Gagal memuat data UMKM");
+          setError(result.error || "Gagal memuat data Culinary");
         }
       } catch (err) {
-        setError("Terjadi kesalahan saat memuat data UMKM");
-        console.error("UMKM fetch error:", err);
+        setError("Terjadi kesalahan saat memuat data Culinary");
+        console.error("Culinary fetch error:", err);
       } finally {
         setIsLoading(false);
       }
@@ -45,14 +45,14 @@ export default function DataUmkmPage() {
     if (deleteId !== null) {
       setIsDeleting(true);
       try {
-        const result = await umkmService.delete(deleteId);
+        const result = await culinaryService.delete(deleteId);
         if (result.success) {
           // Remove from list on successful delete
           setUmkmList((prev) => prev.filter((u) => u.id !== deleteId));
           setShowDeleteModal(false);
           setDeleteId(null);
         } else {
-          alert(result.error || "Gagal menghapus data UMKM");
+          alert(result.error || "Gagal menghapus data Culinary");
         }
       } catch (err) {
         alert("Terjadi kesalahan saat menghapus data");
@@ -72,8 +72,8 @@ export default function DataUmkmPage() {
     <Protected>
     <div className="max-w-full mx-auto">
       <div className="flex justify-between items-center mb-5">
-        <h1 className="text-xl font-semibold mb-4 text-black">Data UMKM</h1>
-        <Link href="/admin/umkm/add" className="flex items-center gap-3 bg-black text-white px-10 py-1 rounded-lg hover:bg-gray-800 transition-colors">
+        <h1 className="text-xl font-semibold mb-4 text-black">Data Kuliner</h1>
+        <Link href="/admin/culinary/add" className="flex items-center gap-3 bg-black text-white px-10 py-1 rounded-lg hover:bg-gray-800 transition-colors">
           Tambah
           <FaPlus />
         </Link>
@@ -87,7 +87,7 @@ export default function DataUmkmPage() {
                 Loading...
               </span>
             </div>
-            <p className="mt-4 text-gray-600">Memuat data UMKM...</p>
+            <p className="mt-4 text-gray-600">Memuat data Culinary...</p>
           </div>
         </div>
       ) : error ? (
@@ -96,14 +96,14 @@ export default function DataUmkmPage() {
         </div>
       ) : umkmList.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-500">Belum ada data UMKM</p>
+          <p className="text-gray-500">Belum ada data Culinary</p>
         </div>
       ) : (
         <div className="bg-white rounded-lg overflow-hidden border">
           <table className="w-full text-sm text-gray-900">
             <thead>
               <tr className="bg-gray-300 text-black">
-                {["No.", "Nama UMKM", "Pemilik", "Kabupaten", "Latitude", "Longitude", "Aksi"].map(h => (
+                {["No.", "Nama Culinary", "Pemilik", "Kabupaten", "Latitude", "Longitude", "Aksi"].map(h => (
                   <th key={h} className="text-center px-5 py-3 font-bold">{h}</th>
                 ))}
               </tr>
@@ -120,7 +120,7 @@ export default function DataUmkmPage() {
                 <td className="px-5 py-4 text-center">
                   <div className="inline-flex items-center gap-2 justify-center">
                     <Link
-                      href={`/admin/umkm/${umkm.id}`}
+                      href={`/admin/culinary/${umkm.id}`}
                       className="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded"
                       aria-label={`Edit ${umkm.name}`}
                     >

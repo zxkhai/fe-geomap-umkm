@@ -1,20 +1,20 @@
 import L from 'leaflet';
 import { foodTrenImage } from '@/assets';
-import { UMKM } from '@/lib/umkm/umkm.type';
-import { MapUMKM } from '@/lib/map/map.type';
+import { Culinary } from '@/lib/culinary/culinary.type';
+import { MapCulinary } from '@/lib/map/map.type';
 
 export class MapUtils {
-  static transformUMKMData(umkmList: UMKM[]): MapUMKM[] {
-    return umkmList.map(umkm => ({
-      id: umkm.id,
-      name: umkm.name.trim(),
-      lat: umkm.location.latitude,
-      lng: umkm.location.longitude,
-      photo: umkm.place_pict || foodTrenImage.src || foodTrenImage,
-      regency: umkm.regency.trim(),
-      address: umkm.address,
-      phone: umkm.phone,
-      story: umkm.story,
+  static transformCulinaryData(culinaryList: Culinary[]): MapCulinary[] {
+    return culinaryList.map(culinary => ({
+      id: culinary.id,
+      name: culinary.name.trim(),
+      lat: culinary.location.latitude,
+      lng: culinary.location.longitude,
+      photo: culinary.product_pict || foodTrenImage.src || foodTrenImage,
+      regency: culinary.regency.trim(),
+      address: culinary.address,
+      phone: culinary.phone,
+      story: culinary.story,
     }));
   }
 
@@ -48,20 +48,20 @@ export class MapUtils {
     });
   }
 
-  static filterUMKM(
-    umkmList: MapUMKM[],
+  static filterCulinary(
+    culinaryList: MapCulinary[],
     filter: string,
     searchQuery: string = ''
-  ): MapUMKM[] {
-    return umkmList.filter((umkm) => {
+  ): MapCulinary[] {
+    return culinaryList.filter((culinary) => {
       // Filter by regency
-      const matchesRegency = filter === 'Semua' || umkm.regency === filter;
+      const matchesRegency = filter === 'Semua' || culinary.regency === filter;
       
       // Filter by search query
       const matchesSearch = searchQuery === '' || 
-        umkm.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        umkm.address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        umkm.regency.toLowerCase().includes(searchQuery.toLowerCase());
+        culinary.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        culinary.address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        culinary.regency.toLowerCase().includes(searchQuery.toLowerCase());
       
       return matchesRegency && matchesSearch;
     });
