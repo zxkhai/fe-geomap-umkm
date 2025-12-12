@@ -4,14 +4,17 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [isEnglish, setIsEnglish] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
+  const isEnglish = language === 'en';
+
   const toggleLanguage = () => {
-    setIsEnglish(!isEnglish);
+    setLanguage(isEnglish ? 'id' : 'en');
   };
 
   const toggleMobileMenu = () => {
@@ -23,19 +26,19 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { name: "Beranda", href: "/" },
-    { name: "Map", href: "/map" },
-    { name: "Kuliner", href: "/culinary" },
-    { name: "Tentang", href: "/about" },
+    { name: t('nav.home'), href: "/" },
+    { name: t('nav.map'), href: "/map" },
+    { name: t('general.culinary'), href: "/culinary" },
+    { name: t('nav.about'), href: "/about" },
   ];
 
   return (
     <nav className="w-full bg-white drop-shadow-lg relative z-50">
       <div className="max-w-7xl mx-auto px-4 py-5 flex items-center justify-between">
         {/* Logo */}
-        <div className="text-lg text-gray-700 font-bold">
-          GEO <span className="text-[var(--yellow-umkm)]">KULINER</span>
-        </div>
+        <Link className="text-lg text-gray-700 font-bold" href="/">
+          GEO <span className="text-(--yellow-umkm)">KULINER</span>
+        </Link>
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex space-x-10">
@@ -45,8 +48,8 @@ export default function Navbar() {
               href={link.href}
               className={`${
                 pathname == link.href
-                  ? "text-[var(--yellow-umkm)] font-bold border-b-2 border-[var(--yellow-umkm)]"
-                  : "text-gray-500 font-medium hover:text-[var(--yellow-umkm)]"
+                  ? "text-(--yellow-umkm) font-bold border-b-2 border-(--yellow-umkm)"
+                  : "text-gray-500 font-medium hover:text-(--yellow-umkm)"
               } transition pb-1`}
             >
               {link.name}
@@ -62,7 +65,7 @@ export default function Navbar() {
           {/* Background */}
           <div className={`absolute inset-0 flex items-center justify-${isEnglish ? "end" : "start"} px-1`}>
             <div
-              className={`w-[65%] h-7 bg-[var(--yellow-umkm)] rounded-full transition-transform duration-300 ease-in-out ${
+              className={`w-[65%] h-7 bg-(--yellow-umkm) rounded-full transition-transform duration-300 ease-in-out ${
                 isEnglish ? "translate-x-[5%]" : "translate-x-0"
               }`}
             ></div>
@@ -152,8 +155,8 @@ export default function Navbar() {
               onClick={closeMobileMenu}
               className={`block py-2 ${
                 pathname == link.href
-                  ? "text-[var(--yellow-umkm)] font-bold border-l-4 border-[var(--yellow-umkm)] pl-3"
-                  : "text-gray-500 font-medium hover:text-[var(--yellow-umkm)] pl-3"
+                  ? "text-(--yellow-umkm) font-bold border-l-4 border-(--yellow-umkm) pl-3"
+                  : "text-gray-500 font-medium hover:text-(--yellow-umkm) pl-3"
               } transition`}
             >
               {link.name}
@@ -169,7 +172,7 @@ export default function Navbar() {
               {/* Background */}
               <div className={`absolute inset-0 flex items-center justify-${isEnglish ? "end" : "start"} px-1`}>
                 <div
-                  className={`w-[65%] h-7 bg-[var(--yellow-umkm)] rounded-full transition-transform duration-300 ease-in-out ${
+                  className={`w-[65%] h-7 bg-(--yellow-umkm) rounded-full transition-transform duration-300 ease-in-out ${
                     isEnglish ? "translate-x-[5%]" : "translate-x-0"
                   }`}
                 ></div>

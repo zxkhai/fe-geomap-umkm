@@ -4,27 +4,29 @@ import { useState, useEffect } from "react";
 import { Culinary } from "@/lib/culinary/culinary.type";
 import { culinaryService } from "@/lib/culinary/culinary.service";
 import PopSlideDetail from "@/components/maps/PopSlideDetail";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 const MapRBI = dynamic(() => import('@/components/maps/MapRBI'), { ssr: false });
 
 export default function MapPage() {
+  const { t } = useLanguage();
   const [activeFilter, setActiveFilter] = useState<string>("Semua");
-  const [selectedUMKM, setSelectedUMKM] = useState<Culinary | null>(null);
+  const [selectedCulinary, setSelectedCulinary] = useState<Culinary | null>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [umkmData, setUmkmData] = useState<Culinary[]>([]);
+  const [culinaryData, setCulinaryData] = useState<Culinary[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
-    fetchUMKMData();
+    fetchCulinaryData();
   }, []);
 
-  const fetchUMKMData = async () => {
+  const fetchCulinaryData = async () => {
     try {
       setLoading(true);
       const result = await culinaryService.getAll();
       if (result.success && result.data) {
-        setUmkmData(result.data);
+        setCulinaryData(result.data);
       }
     } catch (error) {
       console.error("Error fetching Culinary data:", error);
@@ -33,18 +35,18 @@ export default function MapPage() {
     }
   };
 
-  const handleMarkerClick = (umkm: Culinary) => {
-    setSelectedUMKM(umkm);
+  const handleMarkerClick = (culinary: Culinary) => {
+    setSelectedCulinary(culinary);
     setIsDetailOpen(true);
   };
 
   const handleCloseDetail = () => {
     setIsDetailOpen(false);
-    setSelectedUMKM(null);
+    setSelectedCulinary(null);
   };
 
   const filterButtons = [
-    { name: "Semua", value: "Semua" },
+    { name: t('map.filterAll'), value: "Semua" },
     { name: "Pamekasan", value: "Pamekasan" },
     { name: "Sumenep", value: "Sumenep" },
   ];
@@ -53,7 +55,7 @@ export default function MapPage() {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-16 bg-white">
         <div className="flex justify-center items-center h-screen">
-          <div className="text-base md:text-xl">Loading map data...</div>
+          <div className="text-base md:text-xl">{t('map.loadingData')}</div>
         </div>
       </div>
     );
@@ -63,11 +65,9 @@ export default function MapPage() {
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-16 bg-white">
       <div className="mb-6 md:mb-8 text-center">
         <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-5">
-          Geo Kuliner{" "}
-          <span className="text-[var(--yellow-umkm)]">Pamekasan & Sumenep</span>
+          {t('map.title')}{" "}
+          <span className="text-(--yellow-umkm)">{t('map.subtitle')}</span>
         </h2>
-        <p className="text-sm md:text-base mb-2">Gunakan Geo Kuliner Pamekasan & Sumenep untuk menjelajahi cita rasa lokal.</p>
-        <p className="text-sm md:text-base px-4 md:px-0">Pilih kabupaten, klik titik lokasi di peta, dan temukan informasi lengkap tentang kuliner khas beserta pengelolanya.</p>
       </div>
 
       {/* Search Bar */}
@@ -75,7 +75,7 @@ export default function MapPage() {
         <div className="relative w-full">
           <input
             type="text"
-            placeholder="Cari daerah/makanan"
+            placeholder={t('map.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full border border-gray-300 rounded-full px-4 py-2 pr-12 focus:outline-none text-sm md:text-base"
@@ -103,7 +103,7 @@ export default function MapPage() {
       <MapRBI 
         filter={activeFilter} 
         onMarkerClick={handleMarkerClick}
-        culinaryData={umkmData}
+        culinaryData={culinaryData}
         searchQuery={searchQuery}
       />
 
@@ -112,15 +112,15 @@ export default function MapPage() {
         isOpen={isDetailOpen}
         onClose={handleCloseDetail}
         culinary={
-          selectedUMKM
+          selectedCulinary
             ? {
-                name: selectedUMKM.name || '',
-                location: selectedUMKM.regency || '',
-                story: selectedUMKM.story || '',
-                address: selectedUMKM.address || '',
-                phone: selectedUMKM.phone || '',
-                image: selectedUMKM.product_pict || '/culinary/default.jpg',
-                slug: selectedUMKM.slug || '',
+                name: selectedCulinary.name || '',
+                location: selectedCulinary.regency || '',
+                story: selectedCulinary.story || '',
+                address: selectedCulinary.address || '',
+                phone: selectedCulinary.phone || '',
+                image: selectedCulinary.product_pict || '/culinary/default.jpg',
+                slug: selectedCulinary.slug || '',
               }
             : null
         }

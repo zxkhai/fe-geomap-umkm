@@ -6,6 +6,7 @@ import Topbar from '@/components/admins/topbar';
 import Sidebar from '@/components/admins/sidebar';
 import Footer from "@/components/navigations/footer";
 import Navbar from "@/components/navigations/navbar";
+import { LanguageProvider } from "@/lib/i18n/LanguageContext";
 
 const raleway = Raleway({
   subsets: ["latin"],
@@ -29,28 +30,32 @@ export default function App({ Component, pageProps }: AppProps) {
 
   if (isAdminPage) {
     return (
-      <main className={`${raleway.variable}`}>
-        <div className="flex flex-col h-screen">
-          <Topbar />
-          <div className="flex flex-1 bg-white">
-            <Sidebar />
+      <LanguageProvider>
+        <main className={`${raleway.variable}`}>
+          <div className="flex flex-col h-screen">
+            <Topbar />
+            <div className="flex flex-1 bg-white">
+              <Sidebar />
 
-            <div className="flex-1 overflow-y-auto p-6">
-              <Component {...pageProps} />
+              <div className="flex-1 overflow-y-auto p-6">
+                <Component {...pageProps} />
+              </div>
             </div>
           </div>
-        </div>
-      </main>
+        </main>
+      </LanguageProvider>
     );
   }
 
   return (
-    <main className={`${raleway.variable}`}>
-      <Navbar />
-        <div className="bg-white mx-auto text-black">
-          <Component {...pageProps} />
-        </div>
-      <Footer />
-    </main> 
+    <LanguageProvider>
+      <main className={`${raleway.variable}`}>
+        <Navbar />
+          <div className="bg-white mx-auto text-black">
+            <Component {...pageProps} />
+          </div>
+        <Footer />
+      </main> 
+    </LanguageProvider>
   )
 }

@@ -2,13 +2,16 @@ import { foodOneImage, heroAbout, leftsideAbout, rightsideAbout } from "@/assets
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRight } from "react-icons/fa";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function AboutPage() {
+  const { t } = useLanguage();
+  
   return (
     <>  
       {/* HERO SECTION */}
       <section
-        className="w-full min-h-[300px] md:h-[540px] px-4 py-12 md:py-0 items-center flex"
+        className="w-full min-h-75 md:h-135 px-4 py-12 md:py-0 items-center flex"
         style={{
           backgroundImage: `url(${typeof heroAbout === 'string' ? heroAbout : heroAbout.src})`,
           backgroundSize: 'cover',
@@ -16,37 +19,37 @@ export default function AboutPage() {
         }}
       >
         <div className="max-w-7xl px-4 md:px-12 flex-col text-white">
-          <p className="font-bold text-3xl md:text-5xl my-2">Tentang</p>
-          <p className="text-[var(--yellow-umkm)] font-semibold text-3xl md:text-5xl my-2">Geo Kuliner</p>
-          <p className="max-w-xl text-sm md:text-xl my-4 md:my-8">Platform digital resmi dari Dinas Pariwisata Kabupaten Pamekasan & Sampang yang hadir untuk mendukung perkembangan Kuliner lokal agar semakin maju, dikenal luas, dan berdaya saing di era digital.</p>
+          <p className="font-bold text-3xl md:text-5xl my-2">{t('about.title')}</p>
+          <p className="text-(--yellow-umkm) font-semibold text-3xl md:text-5xl my-2">{t('about.subtitle')}</p>
+          <p className="max-w-xl text-sm md:text-xl my-4 md:my-8">{t('about.description')}</p>
         </div>
       </section>
 
       {/* VISI & MISI */}
       <section className="max-w-7xl mx-auto px-4 md:px-6 py-8 md:py-16">
         <h2 className="text-2xl md:text-3xl font-bold mb-6 md:mb-8 text-center">
-          Visi & <span className="text-[var(--yellow-umkm)]">Misi</span>
+          {t('about.visionMission')}
         </h2>
 
         <div className="bg-gray-200 rounded-2xl p-4 md:p-6 text-center mb-6 md:mb-8 text-sm md:text-lg">
-          <h3 className="font-semibold mb-2">Visi</h3>
+          <h3 className="font-semibold mb-2">{t('about.vision')}</h3>
           <p>
-            Mewujudkan Kuliner lokal yang berdaya saing, inovatif, dan berkelanjutan melalui teknologi digital.
+            {t('about.visionText')}
           </p>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            "Memberikan ruang promosi bagi Kuliner lokal.",
-            "Menyediakan informasi yang akurat & mudah diakses.",
-            "Mendorong digitalisasi dan modernisasi Kuliner lokal.",
-            "Menjadi penghubung Kuliner lokal, pemerintah, dan masyarakat.",
+            t('about.mission1'),
+            t('about.mission2'),
+            t('about.mission3'),
+            t('about.mission4'),
           ].map((text, i) => (
             <div
               key={i}
               className="bg-gray-200 rounded-2xl p-4 md:p-6 shadow-sm text-center text-sm md:text-lg"
             >
-              <h4 className="text-[var(--yellow-umkm)] font-semibold mb-2">Misi</h4>
+              <h4 className="text-(--yellow-umkm) font-semibold mb-2">{t('about.mission')}</h4>
               <p>{text}</p>
             </div>
           ))}
@@ -63,7 +66,7 @@ export default function AboutPage() {
               alt="kuliner"
               width={500}
               height={400}
-              className={`rounded-2xl object-cover aspect-[4/3] ${i >= 4 ? 'hidden md:block' : ''}`}
+              className={`rounded-2xl object-cover aspect-4/3 ${i >= 4 ? 'hidden md:block' : ''}`}
             />
           ))}
         </div>
@@ -88,9 +91,9 @@ export default function AboutPage() {
           {/* Title - Shows on mobile at top */}
           <div className="lg:hidden flex items-center justify-center mb-8">
             <h2 className="text-center text-3xl sm:text-4xl font-bold leading-tight">
-              <span className="block">"Mengapa</span>
-              <span className="block text-[var(--yellow-umkm)]">Geo Kuliner</span>
-              <span className="block">Hadir?"</span>
+              <span className="block">"{t('about.whyGeoKuliner').split(' ')[0]}</span>
+              <span className="block text-(--yellow-umkm)">{t('about.whyGeoKuliner').split(' ').slice(1, 3).join(' ')}</span>
+              <span className="block">{t('about.whyGeoKuliner').split(' ').slice(3).join(' ')}"</span>
             </h2>
           </div>
 
@@ -105,7 +108,7 @@ export default function AboutPage() {
                     1
                   </div>
                   <div className="bg-white w-56 rounded-2xl p-6 text-xl text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                    <p>Memperkenalkan produk Kuliner unggulan daerah.</p>
+                    <p>{t('about.why1')}</p>
                   </div>
                 </div>
               </div>
@@ -117,7 +120,7 @@ export default function AboutPage() {
                     4
                   </div>
                   <div className="bg-white rounded-2xl w-60 p-6 text-xl text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                    <p>Menjadikan Kuliner sebagai ikon wisata dan budaya daerah.</p>
+                    <p>{t('about.why4')}</p>
                   </div>
                 </div>
               </div>
@@ -126,9 +129,9 @@ export default function AboutPage() {
             {/* Middle - Title */}
             <div className="flex justify-center py-4">
               <h2 className="text-center text-4xl xl:text-5xl font-bold leading-tight">
-                <span className="block">"Mengapa</span>
-                <span className="block text-[var(--yellow-umkm)]">Geo Kuliner</span>
-                <span className="block">Hadir?"</span>
+                <span className="block">"{t('about.whyGeoKuliner').split(' ')[0]}</span>
+                <span className="block text-(--yellow-umkm)">{t('about.whyGeoKuliner').split(' ').slice(1, 3).join(' ')}</span>
+                <span className="block">{t('about.whyGeoKuliner').split(' ').slice(3).join(' ')}"</span>
               </h2>
             </div>
 
@@ -141,7 +144,7 @@ export default function AboutPage() {
                     2
                   </div>
                   <div className="bg-white rounded-2xl w-64 p-6 text-xl text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                    <p>Membuka akses pasar lebih luas bagi Kuliner lokal.</p>
+                    <p>{t('about.why2')}</p>
                   </div>
                 </div>
               </div>
@@ -153,7 +156,7 @@ export default function AboutPage() {
                     3
                   </div>
                   <div className="bg-white rounded-2xl w-72 p-6 text-xl text-center leading-tight shadow-[0_18px_40px_rgba(0,0,0,0.35)]">
-                    <p>Mendukung pertumbuhan ekonomi lokal.</p>
+                    <p>{t('about.why3')}</p>
                   </div>
                 </div>
               </div>
@@ -169,7 +172,7 @@ export default function AboutPage() {
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10 shadow-lg">
                     1
                   </div>
-                  <p>Memperkenalkan produk Kuliner unggulan daerah</p>
+                  <p>{t('about.why1')}</p>
                 </div>
               </div>
             </div>
@@ -181,7 +184,7 @@ export default function AboutPage() {
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10 shadow-lg">
                     2
                   </div>
-                  <p>Membuka akses pasar lebih luas bagi Kuliner</p>
+                  <p>{t('about.why2')}</p>
                 </div>
               </div>
             </div>
@@ -193,7 +196,7 @@ export default function AboutPage() {
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10 shadow-lg">
                     3
                   </div>
-                  <p>Mendukung pertumbuhan ekonomi lokal</p>
+                  <p>{t('about.why3')}</p>
                 </div>
               </div>
             </div>
@@ -205,7 +208,7 @@ export default function AboutPage() {
                   <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-black text-white rounded-full w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center font-extrabold text-2xl sm:text-3xl z-10 shadow-lg">
                     4
                   </div>
-                  <p>Menjadikan Kuliner daerah sebagai ikon wisata dan budaya</p>
+                  <p>{t('about.why4')}</p>
                 </div>
               </div>
             </div>
@@ -216,16 +219,16 @@ export default function AboutPage() {
       {/* AJAKAN */}
       <section className="flex flex-col justify-center items-center bg-white py-8 md:py-16 px-4 md:px-6 max-w-7xl mx-auto">
         <h2 className="text-xl md:text-3xl font-semibold mb-4 md:mb-5 text-center">
-          Bersama Memperkenalkan <span className="text-[var(--yellow-umkm)]">Kuliner Lokal</span>
+          {t('about.gatherSupport')} <span className="text-(--yellow-umkm)">{t('about.localCulinary')}</span>
         </h2>
         <p className="text-black mb-6 md:mb-10 text-lg md:text-3xl lg:text-4xl text-center px-4">
-          "Mari dukung produk Kuliner Pamekasan &amp; Sumenep dengan bangga."
+          {t('about.supportText')}
         </p>
         <Link
           href="/culinary"
           className="group flex items-center justify-center gap-3 md:gap-5 bg-black text-white px-4 md:px-5 py-2.5 md:py-3 rounded-full hover:bg-white hover:outline-black hover:outline-2 transition-colors"
         >
-          <p className="group-hover:text-black font-medium transition-colors text-sm md:text-base">Jelajahi Kuliner</p>
+          <p className="group-hover:text-black font-medium transition-colors text-sm md:text-base">{t('home.hero.exploreCulinaryButton')}</p>
           <div className="bg-transparent p-1 rounded-full outline-1 outline-white group-hover:bg-black group-hover:outline-none transition-colors">
             <div className="bg-white p-1 rounded-full group-hover:bg-black transition-colors">
               <FaArrowRight className="w-3 h-auto text-black group-hover:text-white transition-colors" />

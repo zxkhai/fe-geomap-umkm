@@ -6,18 +6,21 @@ import { IoLocation } from "react-icons/io5";
 import { BsTelephone } from "react-icons/bs";
 import { FaArrowRight } from "react-icons/fa";
 import { culinaryService } from "@/lib/culinary/culinary.service";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
-export default function UmkmDetailPage() {
+export default function CulinaryDetailPage() {
   const router = useRouter();
   const { slug } = router.query; // Slug from URL
-  const [umkm, setUmkm] = useState<Culinary | null>(null);
+  const [culinary, setCulinary] = useState<Culinary | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (!slug || typeof slug !== 'string') return;
 
-    const fetchUMKMDetail = async () => {
+    const fetchCulinaryDetail = async () => {
       try {
         setLoading(true);
         setError(null);
@@ -26,7 +29,7 @@ export default function UmkmDetailPage() {
         const result = await culinaryService.getBySlug(slug);
         
         if (result.success && result.data) {
-          setUmkm(result.data);
+          setCulinary(result.data);
         } else {
           setError(result.error || "Culinary tidak ditemukan");
         }
@@ -38,7 +41,7 @@ export default function UmkmDetailPage() {
       }
     };
 
-    fetchUMKMDetail();
+    fetchCulinaryDetail();
   }, [slug]);
 
   if (loading) {
@@ -49,7 +52,7 @@ export default function UmkmDetailPage() {
     );
   }
 
-  if (error || !umkm) {
+  if (error || !culinary) {
     return (
       <div className="text-center py-20 text-gray-500">
         {error || "Culinary tidak ditemukan."}
@@ -61,8 +64,8 @@ export default function UmkmDetailPage() {
     <div className="max-w-6xl mx-auto py-16 px-4 grid md:grid-cols-2 gap-10">
       <div>
         <Image
-          src={umkm.product_pict ?? "/placeholder.png"}
-          alt={umkm.name}
+          src={culinary.product_pict ?? "/placeholder.png"}
+          alt={culinary.name}
           width={600}
           height={400}
           className="rounded-2xl shadow-lg object-cover w-full"
@@ -70,58 +73,58 @@ export default function UmkmDetailPage() {
       </div>
 
       <div>
-        <h1 className="text-3xl font-bold mb-2">{umkm.name}</h1>
-        <div className="flex text-[var(--yellow-umkm)] items-center gap-2 text-sm mb-6">
+        <h1 className="text-3xl font-bold mb-2">{culinary.name}</h1>
+        <div className="flex text-(--yellow-umkm) items-center gap-2 text-sm mb-6">
           <IoLocation />
           <p>
-            {umkm.regency} / {umkm.classification || umkm.type || "Culinary"}
+            {culinary.regency} / {culinary.classification || culinary.type || "Culinary"}
           </p>
         </div>
 
-        {umkm.story && (
+        {culinary.story && (
           <>
-            <h2 className="font-semibold mb-2">Sejarah</h2>
-            <p className="text-gray-700 mb-4 text-justify">{umkm.story}</p>
+            <h2 className="font-semibold mb-2">{t('detail.history')}</h2>
+            <p className="text-gray-700 mb-4 text-justify">{culinary.story}</p>
           </>
         )}
 
-        <h2 className="font-semibold mb-2">Pemilik</h2>
-        <p className="text-gray-700 mb-4">{umkm.owner}</p>
+        <h2 className="font-semibold mb-2">{t('detail.owner')}</h2>
+        <p className="text-gray-700 mb-4">{culinary.owner}</p>
 
-        <h2 className="font-semibold mb-2">Alamat</h2>
-        <p className="text-gray-700 mb-4">{umkm.address}</p>
+        <h2 className="font-semibold mb-2">{t('detail.address')}</h2>
+        <p className="text-gray-700 mb-4">{culinary.address}</p>
 
-        <h2 className="font-semibold mb-2">Kontak</h2>
+        <h2 className="font-semibold mb-2">{t('detail.contact')}</h2>
         <p className="text-gray-700 mb-4 flex items-center gap-2">
-          <BsTelephone /> {umkm.phone}
+          <BsTelephone /> {culinary.phone}
         </p>
 
-        {umkm.year && (
+        {culinary.year && (
           <>
-            <h2 className="font-semibold mb-2">Tahun Berdiri</h2>
-            <p className="text-gray-700 mb-4">{umkm.year}</p>
+            <h2 className="font-semibold mb-2">{t('detail.year')}</h2>
+            <p className="text-gray-700 mb-4">{culinary.year}</p>
           </>
         )}
 
-        {umkm.payment && (
+        {culinary.payment && (
           <>
-            <h2 className="font-semibold mb-2">Metode Pembayaran</h2>
-            <p className="text-gray-700 mb-4">{umkm.payment}</p>
+            <h2 className="font-semibold mb-2">{t('detail.payment')}</h2>
+            <p className="text-gray-700 mb-4">{culinary.payment}</p>
           </>
         )}
 
-        {umkm.order && (
+        {culinary.order && (
           <>
-            <h2 className="font-semibold mb-2">Cara Pemesanan</h2>
-            <p className="text-gray-700 mb-6">{umkm.order}</p>
+            <h2 className="font-semibold mb-2">{t('detail.order')}</h2>
+            <p className="text-gray-700 mb-6">{culinary.order}</p>
           </>
         )}
 
-        {umkm.medsos && umkm.medsos.length > 0 && (
+        {culinary.medsos && culinary.medsos.length > 0 && (
           <>
-            <h2 className="font-semibold mb-2">Media Sosial</h2>
+            <h2 className="font-semibold mb-2">{t('detail.socialMedia')}</h2>
             <div className="flex flex-col gap-2 mb-6">
-              {umkm.medsos.map((social, index) => (
+              {culinary.medsos.map((social, index) => (
                 <a
                   key={index}
                   href={social.url}
@@ -138,10 +141,10 @@ export default function UmkmDetailPage() {
         )}
 
         <a
-          href={`tel:${umkm.phone}`}
+          href={`tel:${culinary.phone}`}
           className="group w-full flex items-center justify-between gap-3 bg-black text-white px-6 py-3 rounded-full hover:bg-white hover:outline-black hover:outline-2 transition-colors"
         >
-          <p className="group-hover:text-black font-medium transition-colors">Hubungi</p>
+          <p className="group-hover:text-black font-medium transition-colors">{t('detail.call')}</p>
           <div className="bg-transparent p-1 rounded-full outline-1 outline-white group-hover:bg-black group-hover:outline-none transition-colors">
             <div className="bg-white p-1 rounded-full group-hover:bg-black transition-colors">
               <FaArrowRight className="w-3 h-auto text-black group-hover:text-white transition-colors" />

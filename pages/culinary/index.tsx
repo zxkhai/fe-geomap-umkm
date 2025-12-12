@@ -2,19 +2,21 @@ import { foodOneImage } from "@/assets";
 import { CiSearch } from "react-icons/ci";
 import { useState, useEffect } from "react";
 import { Culinary } from "@/lib/culinary/culinary.type";
-import FoodCardUMKM from "@/components/cards/CardCulinaries";
+import FoodCardCulinary from "@/components/cards/CardCulinaries";
 import { culinaryService } from "@/lib/culinary/culinary.service";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
-export default function UMKMPage() {
+export default function CulinaryPage() {
+  const { t } = useLanguage();
   const [activeFilter, setActiveFilter] = useState<string>("Semua");
-  const [umkmData, setUmkmData] = useState<Culinary[]>([]);
+  const [culinaryData, setCulinaryData] = useState<Culinary[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    fetchUMKMData();
+    fetchCulinaryData();
     
     // Check if mobile on mount and window resize
     const checkMobile = () => {
@@ -27,43 +29,43 @@ export default function UMKMPage() {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const fetchUMKMData = async () => {
+  const fetchCulinaryData = async () => {
     try {
       setLoading(true);
       const result = await culinaryService.getAll();
       if (result.success && result.data) {
-        setUmkmData(result.data);
+        setCulinaryData(result.data);
       }
     } catch (error) {
-      console.error("Error fetching UMKM data:", error);
+      console.error("Error fetching Culinary data:", error);
     } finally {
       setLoading(false);
     }
   };
 
   const filterButtons = [
-    { name: "Semua", value: "Semua" },
+    { name: t('culinary.filterAll'), value: "Semua" },
     { name: "Pamekasan", value: "Pamekasan" },
     { name: "Sumenep", value: "Sumenep" }
   ];
 
-  // Filter UMKM data based on search and regency filter
-  const filteredUMKM = umkmData.filter((umkm) => {
-    const matchesRegency = activeFilter === "Semua" || umkm.regency === activeFilter;
+  // Filter Culinary data based on search and regency filter
+  const filteredCulinary = culinaryData.filter((culinary) => {
+    const matchesRegency = activeFilter === "Semua" || culinary.regency === activeFilter;
     const matchesSearch = searchQuery === "" || 
-      umkm.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      umkm.address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      umkm.regency.toLowerCase().includes(searchQuery.toLowerCase());
+      culinary.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      culinary.address?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      culinary.regency.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesRegency && matchesSearch;
   });
 
   // Pagination logic
   const itemsPerPage = isMobile ? 10 : 15;
-  const totalPages = Math.ceil(filteredUMKM.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredCulinary.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const paginatedUMKM = filteredUMKM.slice(startIndex, endIndex);
+  const paginatedCulinary = filteredCulinary.slice(startIndex, endIndex);
 
   // Reset to page 1 when filter or search changes
   useEffect(() => {
@@ -79,7 +81,7 @@ export default function UMKMPage() {
     return (
       <div className="max-w-7xl mx-auto px-4 py-8 md:py-16 bg-white">
         <div className="flex justify-center items-center h-screen">
-          <div className="text-base md:text-xl">Loading Data Kuliner...</div>
+          <div className="text-base md:text-xl">{t('culinary.loadingData')}</div>
         </div>
       </div>
     );
@@ -88,8 +90,8 @@ export default function UMKMPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 md:py-16 bg-white">
       <h2 className="text-2xl md:text-4xl font-bold text-center mb-6 md:mb-8">
-        Ragam Kuliner{" "}
-        <span className="text-[var(--yellow-umkm)]">Pamekasan & Sumenep</span>
+        {t('culinary.title')}{" "}
+        <span className="text-(--yellow-umkm)">{t('culinary.subtitle')}</span>
       </h2>
 
       {/* Search Bar */}
@@ -97,7 +99,7 @@ export default function UMKMPage() {
         <div className="relative w-full">
           <input
             type="text"
-            placeholder="Cari daerah/makanan"
+            placeholder={t('culinary.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full border border-gray-300 rounded-full px-4 py-2 pr-12 focus:outline-none text-sm md:text-base"
@@ -123,14 +125,14 @@ export default function UMKMPage() {
 
       {/* Grid UMKM */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 md:gap-6 px-3 justify-items-center">
-        {paginatedUMKM.length > 0 ? (
-          paginatedUMKM.map((umkm) => (
-            <div key={umkm.id}>
-              <FoodCardUMKM
+        {paginatedCulinary.length > 0 ? (
+          paginatedCulinary.map((culinary) => (
+            <div key={culinary.id}>
+              <FoodCardCulinary
                 props={{
-                  name: umkm.name,
-                  image: umkm.place_pict || foodOneImage,
-                  slug: `${umkm.slug}`,
+                  name: culinary.name,
+                  image: culinary.place_pict || foodOneImage,
+                  slug: `${culinary.slug}`,
                 }}
               />
             </div>
