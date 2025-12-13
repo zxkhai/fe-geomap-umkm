@@ -121,6 +121,8 @@ export default function MapPage() {
                 phone: selectedCulinary.phone || '',
                 image: selectedCulinary.product_pict || '/culinary/default.jpg',
                 slug: selectedCulinary.slug || '',
+                latitude: selectedCulinary.location?.latitude,
+                longitude: selectedCulinary.location?.longitude,
               }
             : null
         }

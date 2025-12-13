@@ -127,5 +127,6 @@ export const en = {
     payment: "Payment Method",
     order: "Order Method",
     socialMedia: "Social Media",
+    openInGoogleMaps: "Open in Google Maps",
   }
 };

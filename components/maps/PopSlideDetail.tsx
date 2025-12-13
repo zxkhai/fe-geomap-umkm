@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRight, FaMapMarkerAlt, FaPhoneAlt, FaTimes } from "react-icons/fa";
+import { SiGooglemaps } from "react-icons/si";
 import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface PopSlideDetailProps {
@@ -14,6 +15,8 @@ interface PopSlideDetailProps {
     phone: string;
     image: string;
     slug?: string;
+    latitude?: number;
+    longitude?: number;
   } | null;
 }
 
@@ -21,6 +24,16 @@ export default function PopSlideDetail({ isOpen, onClose, culinary }: PopSlideDe
   if (!culinary) return null;
 
   const { t } = useLanguage();
+
+  const openInGoogleMaps = () => {
+    if (culinary.latitude && culinary.longitude) {
+      const url = `https://www.google.com/maps/search/?api=1&query=${culinary.latitude},${culinary.longitude}`;
+      window.open(url, '_blank');
+    } else if (culinary.address) {
+      const url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(culinary.address)}`;
+      window.open(url, '_blank');
+    }
+  };
 
   return (
     <>
@@ -93,6 +106,15 @@ export default function PopSlideDetail({ isOpen, onClose, culinary }: PopSlideDe
               <FaMapMarkerAlt className="w-4 h-4 mt-1 shrink-0 text-red-500" />
               <span>{culinary.address}</span>
             </p>
+            {(culinary.latitude && culinary.longitude) || culinary.address ? (
+              <button
+                onClick={openInGoogleMaps}
+                className="mt-3 w-full flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+              >
+                <SiGooglemaps className="w-4 h-4" />
+                {t('detail.openInGoogleMaps') || 'Open in Google Maps'}
+              </button>
+            ) : null}
           </div>
 
           {/* Contact Section */}

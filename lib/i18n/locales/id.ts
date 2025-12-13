@@ -125,5 +125,6 @@ export const id = {
     payment: "Metode Pembayaran",
     order: "Cara Pemesanan",
     socialMedia: "Media Sosial",
+    openInGoogleMaps: "Buka di Google Maps",
   }
 };
