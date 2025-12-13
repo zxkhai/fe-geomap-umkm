@@ -5,12 +5,12 @@ import { SocialMedia } from "@/lib/culinary/culinary.type";
 import { culinaryService } from "@/lib/culinary/culinary.service";
 import { FaChevronDown, FaChevronUp, FaPlus, FaTrash } from "react-icons/fa";
 
-interface FormKulinerProps {
-  umkmId?: string | number;
+interface FormCulinaryProps {
+  culinaryId?: string | number;
   mode?: "add" | "edit";
 }
 
-export default function FormKuliner({ umkmId, mode = "add" }: FormKulinerProps) {
+export default function FormCulinary({ culinaryId, mode = "add" }: FormCulinaryProps) {
   const router = useRouter();
   const [activeSection, setActiveSection] = useState<string[]>(["informasi-utama"]);
   const [socialMedias, setSocialMedias] = useState<SocialMedia[]>([
@@ -40,34 +40,34 @@ export default function FormKuliner({ umkmId, mode = "add" }: FormKulinerProps) 
   const [existingProductPict, setExistingProductPict] = useState<string>("");
 
   useEffect(() => {
-    if (mode === "edit" && umkmId) {
+    if (mode === "edit" && culinaryId) {
       const fetchCulinaryData = async () => {
         try {
-          const result = await culinaryService.getById(umkmId);
+          const result = await culinaryService.getById(culinaryId);
           if (result.success && result.data) {
-            const umkm = result.data;
+            const culinary = result.data;
             setFormData({
-              name: umkm.name || "",
-              owner: umkm.owner || "",
-              phone: umkm.phone || "",
-              address: umkm.address || "",
-              regency: umkm.regency || "",
-              story: umkm.story || "",
-              year: umkm.year || new Date().getFullYear(),
-              classification: umkm.classification || "",
-              longitude: umkm.location.longitude || 0,
-              latitude: umkm.location.latitude || 0,
-              type: umkm.type || "",
-              order: umkm.order || "",
-              payment: umkm.payment || "",
+              name: culinary.name || "",
+              owner: culinary.owner || "",
+              phone: culinary.phone || "",
+              address: culinary.address || "",
+              regency: culinary.regency || "",
+              story: culinary.story || "",
+              year: culinary.year || new Date().getFullYear(),
+              classification: culinary.classification || "",
+              longitude: culinary.location.longitude || 0,
+              latitude: culinary.location.latitude || 0,
+              type: culinary.type || "",
+              order: culinary.order || "",
+              payment: culinary.payment || "",
             });
-            setExistingPlacePict(umkm.place_pict || "");
-            setExistingProductPict(umkm.product_pict || "");
+            setExistingPlacePict(culinary.place_pict || "");
+            setExistingProductPict(culinary.product_pict || "");
             
             // Load social media data if exists
-            if (umkm.medsos && umkm.medsos.length > 0) {
+            if (culinary.medsos && culinary.medsos.length > 0) {
               setSocialMedias(
-                umkm.medsos.map((media, index) => ({
+                culinary.medsos.map((media, index) => ({
                   id: media.id || Date.now() + index,
                   platform: media.platform || "",
                   username: media.username || "",
@@ -76,18 +76,18 @@ export default function FormKuliner({ umkmId, mode = "add" }: FormKulinerProps) 
               );
             }
           } else {
-            setError(result.error || "Gagal memuat data UMKM");
+            setError(result.error || "Gagal memuat data Kuliner");
           }
         } catch (err) {
           setError("Terjadi kesalahan saat memuat data");
-          console.error("Fetch UMKM error:", err);
+          console.error("Fetch Culinary error:", err);
         } finally {
           setIsFetching(false);
         }
       };
       fetchCulinaryData();
     }
-  }, [mode, umkmId]);
+  }, [mode, culinaryId]);
 
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -178,11 +178,11 @@ export default function FormKuliner({ umkmId, mode = "add" }: FormKulinerProps) 
       }
 
       let result;
-      if (mode === "edit" && umkmId) {
-        // Update existing UMKM
-        result = await culinaryService.update(umkmId, submitData);
+      if (mode === "edit" && culinaryId) {
+        // Update existing Culinary
+        result = await culinaryService.update(culinaryId, submitData);
       } else {
-        // Create new UMKM
+        // Create new Culinary
         result = await culinaryService.create(submitData);
       }
 
@@ -205,7 +205,7 @@ export default function FormKuliner({ umkmId, mode = "add" }: FormKulinerProps) 
       <div className="flex items-center justify-center py-12">
         <div className="text-center">
           <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]">
-            <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+            <span className="absolute! -m-px! h-px! w-px! overflow-hidden! whitespace-nowrap! border-0! p-0! [clip:rect(0,0,0,0)]!">
               Loading...
             </span>
           </div>

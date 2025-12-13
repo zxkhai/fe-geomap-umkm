@@ -7,8 +7,8 @@ import { MdDeleteOutline } from "react-icons/md";
 import Protected from "@/components/auth/Protected";
 import { culinaryService } from "@/lib/culinary/culinary.service";
 
-export default function DataUmkmPage() {
-  const [umkmList, setUmkmList] = useState<Culinary[]>([]);
+export default function DataCulinaryPage() {
+  const [culinaryList, setCulinaryList] = useState<Culinary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -17,11 +17,11 @@ export default function DataUmkmPage() {
 
   // Fetch UMKM data on component mount
   useEffect(() => {
-    const fetchUmkmData = async () => {
+    const fetchCulinaryData = async () => {
       try {
         const result = await culinaryService.getAll();
         if (result.success && result.data) {
-          setUmkmList(result.data);
+          setCulinaryList(result.data);
         } else {
           setError(result.error || "Gagal memuat data Culinary");
         }
@@ -33,7 +33,7 @@ export default function DataUmkmPage() {
       }
     };
 
-    fetchUmkmData();
+    fetchCulinaryData();
   }, []);
 
   const handleDeleteClick = (id: number) => {
@@ -48,11 +48,11 @@ export default function DataUmkmPage() {
         const result = await culinaryService.delete(deleteId);
         if (result.success) {
           // Remove from list on successful delete
-          setUmkmList((prev) => prev.filter((u) => u.id !== deleteId));
+          setCulinaryList((prev) => prev.filter((u) => u.id !== deleteId));
           setShowDeleteModal(false);
           setDeleteId(null);
         } else {
-          alert(result.error || "Gagal menghapus data Culinary");
+          alert(result.error || "Gagal menghapus data Kuliner");
         }
       } catch (err) {
         alert("Terjadi kesalahan saat menghapus data");
@@ -83,54 +83,54 @@ export default function DataUmkmPage() {
         <div className="flex items-center justify-center py-12">
           <div className="text-center">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]">
-              <span className="!absolute !-m-px !h-px !w-px !overflow-hidden !whitespace-nowrap !border-0 !p-0 ![clip:rect(0,0,0,0)]">
+              <span className="absolute! -m-px! h-px! w-px! overflow-hidden! whitespace-nowrap! border-0! p-0! [clip:rect(0,0,0,0)]!">
                 Loading...
               </span>
             </div>
-            <p className="mt-4 text-gray-600">Memuat data Culinary...</p>
+            <p className="mt-4 text-gray-600">Memuat data Kuliner...</p>
           </div>
         </div>
       ) : error ? (
         <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded-lg">
           {error}
         </div>
-      ) : umkmList.length === 0 ? (
+      ) : culinaryList.length === 0 ? (
         <div className="text-center py-12 bg-gray-50 rounded-lg">
-          <p className="text-gray-500">Belum ada data Culinary</p>
+          <p className="text-gray-500">Belum ada data Kuliner</p>
         </div>
       ) : (
         <div className="bg-white rounded-lg overflow-hidden border">
           <table className="w-full text-sm text-gray-900">
             <thead>
               <tr className="bg-gray-300 text-black">
-                {["No.", "Nama Culinary", "Pemilik", "Kabupaten", "Latitude", "Longitude", "Aksi"].map(h => (
+                {["No.", "Nama Kuliner", "Pemilik", "Kabupaten", "Latitude", "Longitude", "Aksi"].map(h => (
                   <th key={h} className="text-center px-5 py-3 font-bold">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {umkmList.map((umkm, index) => (
-              <tr key={umkm.id} className="border-t hover:bg-gray-50 text-black">
+              {culinaryList.map((culinary, index) => (
+              <tr key={culinary.id} className="border-t hover:bg-gray-50 text-black">
                 <td className="px-5 py-4 text-center">{index + 1}</td>
-                <td className="px-5 py-4">{umkm.name}</td>
-                <td className="px-5 py-4 text-center">{umkm.owner}</td>
-                <td className="px-5 py-4 text-center">{umkm.regency}</td>
-                <td className="px-5 py-4 text-center">{umkm.location.latitude}</td>
-                <td className="px-5 py-4 text-center">{umkm.location.longitude}</td>
+                <td className="px-5 py-4">{culinary.name}</td>
+                <td className="px-5 py-4 text-center">{culinary.owner}</td>
+                <td className="px-5 py-4 text-center">{culinary.regency}</td>
+                <td className="px-5 py-4 text-center">{culinary.location.latitude}</td>
+                <td className="px-5 py-4 text-center">{culinary.location.longitude}</td>
                 <td className="px-5 py-4 text-center">
                   <div className="inline-flex items-center gap-2 justify-center">
                     <Link
-                      href={`/admin/culinary/${umkm.id}`}
+                      href={`/admin/culinary/${culinary.id}`}
                       className="text-white bg-blue-500 hover:bg-blue-600 px-3 py-1 rounded"
-                      aria-label={`Edit ${umkm.name}`}
+                      aria-label={`Edit ${culinary.name}`}
                     >
                       <FaRegEdit />
                     </Link>
 
                     <button
-                      onClick={() => handleDeleteClick(umkm.id)}
+                      onClick={() => handleDeleteClick(culinary.id)}
                       className="text-white bg-red-500 hover:bg-red-600 hover:cursor-pointer px-3 py-1 rounded"
-                      aria-label={`Hapus ${umkm.id}`}
+                      aria-label={`Hapus ${culinary.id}`}
                     >
                       <MdDeleteOutline />
                     </button>

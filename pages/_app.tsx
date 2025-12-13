@@ -1,7 +1,7 @@
 import "@/styles/globals.css";
 import { useRouter } from "next/router";
 import type { AppProps } from "next/app";
-import { Raleway } from "next/font/google";
+import { Raleway, Poppins } from "next/font/google";
 import Topbar from '@/components/admins/topbar';
 import Sidebar from '@/components/admins/sidebar';
 import Footer from "@/components/navigations/footer";
@@ -12,6 +12,12 @@ const raleway = Raleway({
   subsets: ["latin"],
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
   variable: "--font-raleway",
+});
+
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+  variable: "--font-poppins",
 });
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -31,7 +37,7 @@ export default function App({ Component, pageProps }: AppProps) {
   if (isAdminPage) {
     return (
       <LanguageProvider>
-        <main className={`${raleway.variable}`}>
+        <main className={`${poppins.variable} font-(family-name:--font-poppins)`}>
           <div className="flex flex-col h-screen">
             <Topbar />
             <div className="flex flex-1 bg-white">
