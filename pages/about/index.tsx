@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { foodOneImage, heroAbout, leftsideAbout, rightsideAbout } from "@/assets";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,6 +10,10 @@ export default function AboutPage() {
   
   return (
     <>  
+      <Head>
+        <title>Tentang Kami - GeoKuliner</title>
+        <meta name="description" content="Kenali lebih dekat GeoKuliner, platform peta kuliner untuk mendukung UMKM lokal Pamekasan dan Sumenep." />
+      </Head>
       {/* HERO SECTION */}
       <section
         className="w-full min-h-75 md:h-135 px-4 py-12 md:py-0 items-center flex"

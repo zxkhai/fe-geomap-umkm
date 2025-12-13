@@ -1,3 +1,4 @@
+import Head from "next/head";
 import dynamic from "next/dynamic";
 import { CiSearch } from "react-icons/ci";
 import { useState, useEffect } from "react";
@@ -62,7 +63,12 @@ export default function MapPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 md:py-16 bg-white">
+    <>
+      <Head>
+        <title>Peta Kuliner - GeoKuliner</title>
+        <meta name="description" content="Jelajahi peta kuliner interaktif Pamekasan dan Sumenep. Temukan lokasi kuliner terbaik di sekitar Anda." />
+      </Head>
+      <div className="max-w-7xl mx-auto px-4 py-8 md:py-16 bg-white">
       <div className="mb-6 md:mb-8 text-center">
         <h2 className="text-2xl md:text-4xl font-bold mb-3 md:mb-5">
           {t('map.title')}{" "}
@@ -127,6 +133,7 @@ export default function MapPage() {
             : null
         }
       />
-    </div>
+      </div>
+    </>
   );
 }

@@ -1,3 +1,4 @@
+import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
@@ -42,6 +43,10 @@ export default function LandingPage() {
 
   return (
     <>
+      <Head>
+        <title>GeoKuliner - Peta Kuliner Pamekasan & Sumenep</title>
+        <meta name="description" content="Satu peta, ribuan rasa untuk dijelajahi. Temukan kuliner lokal terbaik di Madura." />
+      </Head>
       {/* HERO SECTION */}
       <section
         className="w-full min-h-100 md:h-135 flex items-center px-4 py-12 md:py-0"

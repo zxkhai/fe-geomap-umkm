@@ -1,3 +1,4 @@
+import Head from "next/head";
 import { foodOneImage } from "@/assets";
 import { CiSearch } from "react-icons/ci";
 import { useState, useEffect } from "react";
@@ -88,7 +89,12 @@ export default function CulinaryPage() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8 md:py-16 bg-white">
+    <>
+      <Head>
+        <title>Ragam Kuliner - GeoKuliner</title>
+        <meta name="description" content="Jelajahi berbagai pilihan kuliner dari Pamekasan dan Sumenep. Temukan makanan favorit Anda di peta kuliner interaktif." />
+      </Head>
+      <div className="max-w-7xl mx-auto px-4 py-8 md:py-16 bg-white">
       <h2 className="text-2xl md:text-4xl font-bold text-center mb-6 md:mb-8">
         {t('culinary.title')}{" "}
         <span className="text-(--yellow-umkm)">{t('culinary.subtitle')}</span>
@@ -210,6 +216,7 @@ export default function CulinaryPage() {
           </button>
         </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }
