@@ -19,7 +19,6 @@ export const en = {
       culinaryRegion: "Madura Regency with distinctive culinary",
     },
     popularCulinary: {
-      culinary: "Culinary",
       popular: "Popular",
       results: "No culinary data available",
     },

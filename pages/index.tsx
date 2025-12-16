@@ -130,7 +130,7 @@ export default function LandingPage() {
       {/* Popular Culinary */}
       <section className="max-w-7xl mx-auto px-4 py-8">
         <h2 className="text-xl md:text-4xl font-bold mb-6">
-          {t('home.popularCulinary.culinary')} <span className="text-(--yellow-umkm)">{t('home.popularCulinary.popular')}</span>
+          {t('general.culinary')} <span className="text-(--yellow-umkm)">{t('home.popularCulinary.popular')}</span>
         </h2>
         {loading ? (
           <div className="text-center py-12">
